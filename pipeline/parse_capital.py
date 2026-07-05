@@ -219,11 +219,18 @@ def main():
             continue
 
         history.sort(key=lambda h: h["date"])
+        if existing_key is None:
+            # No seeded baseline for this company: never auto-create an entry
+            # (parsed values cannot be sanity-checked). Log it for manual seeding.
+            latest = history[-1]
+            summary.append({
+                "offeree": offeree, "declarations": len(declarations),
+                "kept": len(history), "needs_manual_baseline": True,
+                "latest_parsed_total": latest["total"],
+                "latest_parsed_date": latest.get("as_at") or latest["date"],
+            })
+            continue
         key = existing_key
-        if key is None:
-            key = offeree.upper()
-            state[key] = {}
-            state_keys[target_key] = key
         entry = state[key] if isinstance(state[key], dict) else {"total": state[key]}
 
         merged = {(h["date"], h["total"]): h for h in (entry.get("history") or [])}
