@@ -126,14 +126,41 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", default="pipeline/tmp_capital/capital-declarations.json")
     parser.add_argument("--state", default="pipeline/state/share_capital.json")
+    parser.add_argument("--filings", default="", help="filings.json for sanity checks (default: alongside state)")
+    parser.add_argument("--max-age-days", type=int, default=730, help="Ignore declarations older than this")
     args = parser.parse_args()
+
+    import datetime as dt
 
     input_path = Path(args.input).resolve()
     base_dir = input_path.parent
     data = json.loads(input_path.read_text(encoding="utf-8"))
     state_path = Path(args.state).resolve()
     state = json.loads(state_path.read_text(encoding="utf-8"))
+    filings_path = Path(args.filings) if args.filings else state_path.parent / "filings.json"
 
+    # Sanity anchor: the largest disclosed resulting holding per target from our
+    # own AMF dealing data. No parsed share count may be smaller than a position
+    # someone has disclosed in that company.
+    max_disclosed = {}
+    if filings_path.exists():
+        filings = json.loads(filings_path.read_text(encoding="utf-8"))
+        first_num = re.compile(r"\d[\d .,\u00a0\u202f]*")
+        for row in filings.get("transactions", []):
+            target_key = normalise_target_key(row.get("target"))
+            if not target_key:
+                continue
+            m = first_num.search(str(row.get("resulting_holding") or ""))
+            if not m:
+                continue
+            digits = re.sub(r"[^0-9]", "", m.group())
+            if not digits:
+                continue
+            value = int(digits)
+            if value > max_disclosed.get(target_key, 0):
+                max_disclosed[target_key] = value
+
+    cutoff_date = (dt.date.today() - dt.timedelta(days=args.max_age_days)).isoformat()
     state_keys = {normalise_target_key(k): k for k in state if not str(k).startswith("_")}
     summary = []
 
@@ -142,9 +169,24 @@ def main():
         declarations = company.get("declarations") or []
         if not offeree:
             continue
-        history = []
-        failures = 0
+        target_key = normalise_target_key(offeree)
+        existing_key = state_keys.get(target_key)
+        existing = state.get(existing_key) if existing_key else None
+        if existing is not None and not isinstance(existing, dict):
+            existing = {"total": existing}
+        baseline = None
+        if existing:
+            try:
+                baseline = int(str(existing.get("total")).replace(",", "").replace(" ", ""))
+            except (TypeError, ValueError):
+                baseline = None
+        floor = max_disclosed.get(target_key, 0)
+
+        history, rejected, failures = [], [], 0
         for declaration in declarations:
+            emitted = str(declaration.get("emission_date") or "")
+            if emitted and emitted < cutoff_date:
+                continue  # too old to be useful for live-deal percentages
             local = declaration.get("local_pdf")
             if not local:
                 failures += 1
@@ -153,25 +195,35 @@ def main():
             if parsed.get("error"):
                 failures += 1
                 continue
+            shares = parsed["shares"]
+            reasons = []
+            if floor and shares < floor * 0.95:
+                reasons.append(f"below max disclosed holding {floor}")
+            if baseline and not (baseline / 2.5 <= shares <= baseline * 2.5):
+                reasons.append(f"implausible vs existing total {baseline}")
+            if reasons:
+                rejected.append({"date": emitted, "total": shares, "why": "; ".join(reasons)})
+                continue
             history.append({
-                "date": declaration.get("emission_date") or "",
+                "date": emitted,
                 "as_at": parsed.get("as_at"),
-                "total": parsed["shares"],
+                "total": shares,
                 "voting_rights": parsed.get("votes"),
                 "source_url": declaration.get("source_url"),
             })
+
         if not history:
             if declarations:
                 summary.append({"offeree": offeree, "declarations": len(declarations),
-                                "parsed": 0, "failures": failures})
+                                "kept": 0, "rejected": len(rejected), "failures": failures})
             continue
 
         history.sort(key=lambda h: h["date"])
-        key = state_keys.get(normalise_target_key(offeree))
+        key = existing_key
         if key is None:
             key = offeree.upper()
             state[key] = {}
-            state_keys[normalise_target_key(offeree)] = key
+            state_keys[target_key] = key
         entry = state[key] if isinstance(state[key], dict) else {"total": state[key]}
 
         merged = {(h["date"], h["total"]): h for h in (entry.get("history") or [])}
@@ -180,22 +232,27 @@ def main():
         entry["history"] = sorted(merged.values(), key=lambda h: h["date"])
 
         latest = entry["history"][-1]
-        if not entry.get("manual"):
+        latest_date = latest.get("as_at") or latest["date"]
+        overwritten = False
+        if not entry.get("manual") and str(latest_date) > str(entry.get("date") or ""):
             entry["total"] = latest["total"]
-            entry["date"] = latest.get("as_at") or latest["date"]
+            entry["date"] = latest_date
             entry["source"] = "AMF 223-16 declaration (info-financiere.gouv.fr)"
+            overwritten = True
         state[key] = entry
         summary.append({
             "offeree": offeree, "declarations": len(declarations),
-            "parsed": len(history), "failures": failures,
-            "latest_total": latest["total"], "latest_date": latest.get("as_at") or latest["date"],
-            "pinned_manual": bool(entry.get("manual")),
+            "kept": len(history), "rejected": len(rejected), "failures": failures,
+            "latest_total": latest["total"], "latest_date": latest_date,
+            "total_updated": overwritten, "pinned_manual": bool(entry.get("manual")),
+            "rejects": rejected[:3],
         })
 
-    state.setdefault(
-        "_note_capital_history",
-        "History arrays are maintained automatically from AMF 223-16 declarations. "
-        "The latest declaration overwrites total/date unless the entry has \"manual\": true.",
+    state["_note_capital_history"] = (
+        "History arrays are maintained automatically from AMF 223-16 declarations "
+        "(last 24 months only). Parsed totals are validated against disclosed positions "
+        "and the existing figure; the entry's total/date is only replaced by a NEWER "
+        "declaration, and never when the entry has \"manual\": true."
     )
     state_path.write_text(json.dumps(state, indent=2, ensure_ascii=False), encoding="utf-8")
     print(json.dumps({"updated": summary}, indent=2, ensure_ascii=False))
