@@ -122,6 +122,22 @@ def fetch_and_merge(since, limit):
     print(f"State updated: +{added_notices} notices, +{added_tx} transactions.")
 
 
+def refresh_share_capital():
+    """Fetch AMF 223-16 declarations and update the share-capital history.
+    Failures here must never break the daily filings refresh."""
+    tmp = ROOT / "tmp_capital"
+    try:
+        run(["node", ROOT / "fetch_capital.mjs",
+             "--state", STATE / "filings.json", "--out", tmp])
+        run([sys.executable, ROOT / "parse_capital.py",
+             "--input", tmp / "capital-declarations.json",
+             "--state", STATE / "share_capital.json"])
+    except Exception as error:  # noqa: BLE001
+        print(f"WARNING: share-capital refresh failed: {error}")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -139,6 +155,7 @@ def main():
             last = dt.date.fromisoformat(latest_state_date(load(STATE / "raw-filings.json")))
             since = (last - dt.timedelta(days=5)).isoformat()
         fetch_and_merge(since, args.limit)
+        refresh_share_capital()
 
     run([sys.executable, ROOT / "build_app.py"])
     shutil.rmtree(TMP, ignore_errors=True)

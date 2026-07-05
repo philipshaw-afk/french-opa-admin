@@ -3432,6 +3432,26 @@ def build_share_capital_entries(payload):
             "check": "Imported from share_capital.json",
             "matched_known_target": bool(target),
         })
+        # Dated capital history from AMF 223-16 declarations (drives
+        # as-at-date percentages in the historical share register).
+        if isinstance(info, dict):
+            seen_points = {(str(date)[:10], total)}
+            for point in info.get("history") or []:
+                try:
+                    h_total = int(str(point.get("total")).replace(",", "").replace(" ", ""))
+                except (TypeError, ValueError):
+                    continue
+                h_date = str(point.get("as_at") or point.get("date") or "")[:10]
+                if h_total <= 0 or not h_date or (h_date, h_total) in seen_points:
+                    continue
+                seen_points.add((h_date, h_total))
+                entries.append({
+                    "target": target or str(name).strip(),
+                    "date": h_date,
+                    "total": h_total,
+                    "check": "AMF 223-16 declaration",
+                    "matched_known_target": bool(target),
+                })
     return entries
 
 
