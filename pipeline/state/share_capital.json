@@ -436,9 +436,19 @@
     "status": "Pending"
   },
   "VINPAI SA": {
-    "total": 3461415,
-    "date": "2026-07-05",
-    "status": "Pending"
+    "total": 4561415,
+    "date": "2026-04-24",
+    "status": "Pending",
+    "note": "AMF 223-16 declaration 24/04/2026 (as at 31/03/2026): 4,561,415 shares / 4,728,885 voting rights, after 1m-share capital increase. Source: info-financiere.gouv.fr FCBWR167514.",
+    "history": [
+      {
+        "date": "2026-04-24",
+        "as_at": "2026-03-31",
+        "total": 4561415,
+        "voting_rights": 4728885,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/BWR/2026/04/FCBWR167514_20260424.pdf"
+      }
+    ]
   },
   "POULAILLON SA": {
     "total": 5111119,
