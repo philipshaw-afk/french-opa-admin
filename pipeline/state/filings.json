@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-07-07T08:46:30+00:00",
+  "generated_at": "2026-07-07T19:24:07+00:00",
   "source": {
-    "bdif_endpoint": "https://bdif.amf-france.org/back/api/v1/informations?TypesInformation=OPA&TypesDocument=DeclarationAchatVente&From=0&Size=500&DateDebut=2026-06-28T00%3A00%3A00.000Z",
+    "bdif_endpoint": "https://bdif.amf-france.org/back/api/v1/informations?TypesInformation=OPA&TypesDocument=DeclarationAchatVente&From=0&Size=500&DateDebut=2026-07-01T00%3A00%3A00.000Z",
     "amf_takeover_reporting_page": "https://www.amf-france.org/en/professionals/professional-investors/my-relations-amf/takeover-reporting",
     "offer_period_company_list": {
-      "url": "https://www.amf-france.org/sites/institutionnel/files/private/2026-07/tableau-opa-disclosure-table-3-juillet-2026_0.xlsx",
+      "url": "https://www.amf-france.org/sites/institutionnel/files/private/2026-07/tableau-opa-disclosure-table-7-juillet-2026_0.xlsx",
       "local_file": "amf-current-offer-companies.xlsx"
     },
     "historic_zodiac_bdif_endpoint": "https://bdif.amf-france.org/back/api/v1/informations?TypesInformation=OPA&TypesDocument=DeclarationAchatVente&From=0&Size=600&DateDebut=2016-12-31T23%3A00%3A00.000Z&DateFin=2018-12-31T22%3A59%3A59.000Z&Jetons=RS00001661",
@@ -11633,10 +11633,124 @@
       "published_at": "2026-07-06T14:24:04.9561306+02:00",
       "online_at": "2026-07-06T14:24:02.853",
       "date_information": "2026-07-06T00:00:00"
+    },
+    {
+      "document_date": "2026-07-07",
+      "parse_status": "ok",
+      "parse_notes": [],
+      "notice_level_resulting_holdings": [
+        "1 043 255 actions et droits de vote**/***"
+      ],
+      "amf_number": "226C1004",
+      "target": "PIERRE ET VACANCES",
+      "document_url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1004/BBA409C9D81232E60A373FBC717BB7DA0FAACA33A60ED215A081E8356B7A00D5.pdf",
+      "published_at": "2026-07-07T17:08:04.0485392+02:00",
+      "online_at": "2026-07-07T17:08:02.803",
+      "date_information": "2026-07-07T00:00:00"
+    },
+    {
+      "document_date": "2026-07-07",
+      "parse_status": "ok",
+      "parse_notes": [],
+      "notice_level_resulting_holdings": [
+        "372 029 CFD*"
+      ],
+      "amf_number": "226C1003",
+      "target": "FNAC DARTY",
+      "document_url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1003/1292F5CFA964674CDB8CBF3CB5AC66BFF0621B6BE6B6C28CC01DF88EBDF5AB69.pdf",
+      "published_at": "2026-07-07T17:08:04.7084165+02:00",
+      "online_at": "2026-07-07T17:08:02.007",
+      "date_information": "2026-07-07T00:00:00"
+    },
+    {
+      "document_date": "2026-07-07",
+      "parse_status": "ok",
+      "parse_notes": [],
+      "notice_level_resulting_holdings": [
+        "404 284 actions et droits de vote",
+        "3 934 equity swaps*",
+        "- 403 984 equity swaps*"
+      ],
+      "amf_number": "226C1002",
+      "target": "FNAC DARTY",
+      "document_url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1002/8C4F5037FE9376DFD3BF0AABAE4345E7FD49920853383302A54164621DB6268D.pdf",
+      "published_at": "2026-07-07T17:06:03.9886803+02:00",
+      "online_at": "2026-07-07T17:06:02.73",
+      "date_information": "2026-07-07T00:00:00"
+    },
+    {
+      "document_date": "2026-07-07",
+      "parse_status": "ok",
+      "parse_notes": [],
+      "notice_level_resulting_holdings": [
+        "324 143 CFD**/***"
+      ],
+      "amf_number": "226C1001",
+      "target": "FNAC DARTY",
+      "document_url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1001/9D64C0B08D2D9356589310419F6C7141809D596F43CDF89382E5641E0B8CD99E.pdf",
+      "published_at": "2026-07-07T17:06:04.8695996+02:00",
+      "online_at": "2026-07-07T17:06:01.953",
+      "date_information": "2026-07-07T00:00:00"
+    },
+    {
+      "document_date": "2026-07-07",
+      "parse_status": "ok",
+      "parse_notes": [],
+      "notice_level_resulting_holdings": [
+        "482 932 actions et droits de vote**/***"
+      ],
+      "amf_number": "226C1000",
+      "target": "FNAC DARTY",
+      "document_url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1000/521CB495E76CF34DFB1B2794BDC37AABA4FA0DCDC715DB37C9B87C8E784CD540.pdf",
+      "published_at": "2026-07-07T17:04:03.3014642+02:00",
+      "online_at": "2026-07-07T17:04:01.99",
+      "date_information": "2026-07-07T00:00:00"
+    },
+    {
+      "document_date": "2026-07-07",
+      "parse_status": "ok",
+      "parse_notes": [],
+      "notice_level_resulting_holdings": [
+        "4 351 894 actions et 4 325 158 droits de vote**"
+      ],
+      "amf_number": "226C0995",
+      "target": "VINPAI",
+      "document_url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C0995/837D6483A4C7B34DFE1CF9952FC5F1EF58A4E04D939740256D590B54443E0CE2.pdf",
+      "published_at": "2026-07-07T15:24:03.0370465+02:00",
+      "online_at": "2026-07-07T15:24:01.963",
+      "date_information": "2026-07-07T00:00:00"
+    },
+    {
+      "document_date": "2026-07-07",
+      "parse_status": "ok",
+      "parse_notes": [],
+      "notice_level_resulting_holdings": [
+        "78 692 409 actions et droits de vote**/***"
+      ],
+      "amf_number": "226C0994",
+      "target": "SOCIETE DE LA TOUR EIFFEL",
+      "document_url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C0994/44F9C7BC9AF9D70A85E4493A4C75FC5B8232553E0655B180B7CB90E4A1AA6695.pdf",
+      "published_at": "2026-07-07T15:22:02.9909923+02:00",
+      "online_at": "2026-07-07T15:22:01.967",
+      "date_information": "2026-07-07T00:00:00"
+    },
+    {
+      "document_date": "2026-07-07",
+      "parse_status": "ok",
+      "parse_notes": [],
+      "notice_level_resulting_holdings": [
+        "3 812 723 actions et droits de vote"
+      ],
+      "amf_number": "226C0993",
+      "target": "ADEUNIS",
+      "document_url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C0993/69076E8F934F69B22CD5E844F34598337AB2BBF825378429B885CE21504C0104.pdf",
+      "published_at": "2026-07-07T15:18:03.0725685+02:00",
+      "online_at": "2026-07-07T15:18:01.917",
+      "date_information": "2026-07-07T00:00:00"
     }
   ],
   "offer_period_companies_from_amf_xlsx": {
-    "last_update": "2026-07-03",
+    "last_update": "2026-07-07",
     "companies": [
       {
         "offeree": "ENTREPRENDRE",
@@ -11653,13 +11767,6 @@
         "draft_offer_filed": null
       },
       {
-        "offeree": "LEXIBOOK",
-        "isin": "FR0000033599",
-        "offeror": "DOODLE SAS",
-        "offer_announced": "2026-06-04",
-        "draft_offer_filed": null
-      },
-      {
         "offeree": "PIERRE ET VACANCES",
         "isin": "FR0000073041",
         "offeror": "MUBADALA CAPITAL",
@@ -11671,6 +11778,13 @@
         "isin": "FR0010428771",
         "offeror": "OLYMPE BIDCO",
         "offer_announced": "2026-06-23",
+        "draft_offer_filed": null
+      },
+      {
+        "offeree": "EXAIL TECHNOLOGIES",
+        "isin": "FR0000062671",
+        "offeror": "THALES",
+        "offer_announced": "2026-07-06",
         "draft_offer_filed": null
       },
       {
@@ -11749,6 +11863,13 @@
         "offeror": "PAPREC HOLDING",
         "offer_announced": "2026-01-19",
         "draft_offer_filed": "2026-07-02"
+      },
+      {
+        "offeree": "LEXIBOOK",
+        "isin": "FR0000033599",
+        "offeror": "DOODLE SAS",
+        "offer_announced": "2026-06-04",
+        "draft_offer_filed": "2026-07-06"
       }
     ]
   },
@@ -48192,6 +48313,226 @@
       "resulting_holding": "3 809 651 actions et droits de vote",
       "document_url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C0977/E16E4C0DB811FB008EA4DADAE703136DFCC45B7CFB12728231D11E7BD1BDC8DC.pdf",
       "document_file": "pdfs/226C0977.pdf"
+    },
+    {
+      "amf_number": "226C1004",
+      "target": "PIERRE ET VACANCES",
+      "filer": "Fidera GP S.a r.l.",
+      "operation": "achat le 03/07/2026",
+      "operation_type": "buy",
+      "transaction_date": "2026-07-03",
+      "published_at": "2026-07-07T17:08:04.0485392+02:00",
+      "online_at": "2026-07-07T17:08:02.803",
+      "date_information": "2026-07-07T00:00:00",
+      "isin": "FR0000073041",
+      "instrument_type": "Shares",
+      "quantity": 1043255,
+      "quantity_text": "1 043 255",
+      "security": "actions",
+      "price_eur": "1,822",
+      "resulting_holding": "1 043 255 actions et droits de vote**/***",
+      "document_url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1004/BBA409C9D81232E60A373FBC717BB7DA0FAACA33A60ED215A081E8356B7A00D5.pdf",
+      "document_file": "pdfs/226C1004.pdf"
+    },
+    {
+      "amf_number": "226C1003",
+      "target": "FNAC DARTY",
+      "filer": "Pictet Asset",
+      "operation": "accroissement d’une position longue le 06/07/2026",
+      "operation_type": "derivative_position",
+      "transaction_date": "2026-07-06",
+      "published_at": "2026-07-07T17:08:04.7084165+02:00",
+      "online_at": "2026-07-07T17:08:02.007",
+      "date_information": "2026-07-07T00:00:00",
+      "isin": "FR0011476928",
+      "instrument_type": "Derivative",
+      "quantity": 111,
+      "quantity_text": "111",
+      "security": "CFD",
+      "price_eur": "34,50",
+      "resulting_holding": "372 029 CFD*",
+      "document_url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1003/1292F5CFA964674CDB8CBF3CB5AC66BFF0621B6BE6B6C28CC01DF88EBDF5AB69.pdf",
+      "document_file": "pdfs/226C1003.pdf"
+    },
+    {
+      "amf_number": "226C1002",
+      "target": "FNAC DARTY",
+      "filer": "HSBC Holdings Plc",
+      "operation": "achat le 06/07/2026",
+      "operation_type": "buy",
+      "transaction_date": "2026-07-06",
+      "published_at": "2026-07-07T17:06:03.9886803+02:00",
+      "online_at": "2026-07-07T17:06:02.73",
+      "date_information": "2026-07-07T00:00:00",
+      "isin": "FR0011476928",
+      "instrument_type": "Shares",
+      "quantity": 26,
+      "quantity_text": "26",
+      "security": "actions",
+      "price_eur": "34,50",
+      "resulting_holding": null,
+      "document_url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1002/8C4F5037FE9376DFD3BF0AABAE4345E7FD49920853383302A54164621DB6268D.pdf",
+      "document_file": "pdfs/226C1002.pdf"
+    },
+    {
+      "amf_number": "226C1002",
+      "target": "FNAC DARTY",
+      "filer": "HSBC Holdings Plc",
+      "operation": "vente le 06/07/2026",
+      "operation_type": "sell",
+      "transaction_date": "2026-07-06",
+      "published_at": "2026-07-07T17:06:03.9886803+02:00",
+      "online_at": "2026-07-07T17:06:02.73",
+      "date_information": "2026-07-07T00:00:00",
+      "isin": "FR0011476928",
+      "instrument_type": "Shares",
+      "quantity": 1108,
+      "quantity_text": "1 108",
+      "security": "actions",
+      "price_eur": "34,55",
+      "resulting_holding": "404 284 actions et droits de vote",
+      "document_url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1002/8C4F5037FE9376DFD3BF0AABAE4345E7FD49920853383302A54164621DB6268D.pdf",
+      "document_file": "pdfs/226C1002.pdf"
+    },
+    {
+      "amf_number": "226C1002",
+      "target": "FNAC DARTY",
+      "filer": "HSBC Holdings Plc",
+      "operation": "réduction d’une position longue le 06/07/2026",
+      "operation_type": "derivative_position",
+      "transaction_date": "2026-07-06",
+      "published_at": "2026-07-07T17:06:03.9886803+02:00",
+      "online_at": "2026-07-07T17:06:02.73",
+      "date_information": "2026-07-07T00:00:00",
+      "isin": "FR0011476928",
+      "instrument_type": "Derivative",
+      "quantity": 26,
+      "quantity_text": "26",
+      "security": "equity swaps",
+      "price_eur": "34,50",
+      "resulting_holding": "3 934 equity swaps*",
+      "document_url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1002/8C4F5037FE9376DFD3BF0AABAE4345E7FD49920853383302A54164621DB6268D.pdf",
+      "document_file": "pdfs/226C1002.pdf"
+    },
+    {
+      "amf_number": "226C1002",
+      "target": "FNAC DARTY",
+      "filer": "HSBC Holdings Plc",
+      "operation": "réduction d’une position courte le 06/07/2026",
+      "operation_type": "derivative_position",
+      "transaction_date": "2026-07-06",
+      "published_at": "2026-07-07T17:06:03.9886803+02:00",
+      "online_at": "2026-07-07T17:06:02.73",
+      "date_information": "2026-07-07T00:00:00",
+      "isin": "FR0011476928",
+      "instrument_type": "Derivative",
+      "quantity": 1108,
+      "quantity_text": "1 108",
+      "security": "equity swaps",
+      "price_eur": "34,55",
+      "resulting_holding": "- 403 984 equity swaps*",
+      "document_url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1002/8C4F5037FE9376DFD3BF0AABAE4345E7FD49920853383302A54164621DB6268D.pdf",
+      "document_file": "pdfs/226C1002.pdf"
+    },
+    {
+      "amf_number": "226C1001",
+      "target": "FNAC DARTY",
+      "filer": "Boussard & Gavaudan",
+      "operation": "accroissement d’une position longue le 06/07/2026",
+      "operation_type": "derivative_position",
+      "transaction_date": "2026-07-06",
+      "published_at": "2026-07-07T17:06:04.8695996+02:00",
+      "online_at": "2026-07-07T17:06:01.953",
+      "date_information": "2026-07-07T00:00:00",
+      "isin": "FR0011476928",
+      "instrument_type": "Derivative",
+      "quantity": 48,
+      "quantity_text": "48",
+      "security": "CFD",
+      "price_eur": "34,45",
+      "resulting_holding": "324 143 CFD**/***",
+      "document_url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1001/9D64C0B08D2D9356589310419F6C7141809D596F43CDF89382E5641E0B8CD99E.pdf",
+      "document_file": "pdfs/226C1001.pdf"
+    },
+    {
+      "amf_number": "226C1000",
+      "target": "FNAC DARTY",
+      "filer": "BlackRock, Inc.",
+      "operation": "transfert de garantie out* le 06/07/2026",
+      "operation_type": "transfer_out",
+      "transaction_date": "2026-07-06",
+      "published_at": "2026-07-07T17:04:03.3014642+02:00",
+      "online_at": "2026-07-07T17:04:01.99",
+      "date_information": "2026-07-07T00:00:00",
+      "isin": "FR0011476928",
+      "instrument_type": "Shares",
+      "quantity": 15738,
+      "quantity_text": "15 738",
+      "security": "actions",
+      "price_eur": "-",
+      "resulting_holding": "482 932 actions et droits de vote**/***",
+      "document_url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1000/521CB495E76CF34DFB1B2794BDC37AABA4FA0DCDC715DB37C9B87C8E784CD540.pdf",
+      "document_file": "pdfs/226C1000.pdf"
+    },
+    {
+      "amf_number": "226C0995",
+      "target": "VINPAI",
+      "filer": "Camlin Fine Sciences Ltd.",
+      "operation": "achat le 06/07/2026",
+      "operation_type": "buy",
+      "transaction_date": "2026-07-06",
+      "published_at": "2026-07-07T15:24:03.0370465+02:00",
+      "online_at": "2026-07-07T15:24:01.963",
+      "date_information": "2026-07-07T00:00:00",
+      "isin": "FR001400AXT1",
+      "instrument_type": "Shares",
+      "quantity": 18826,
+      "quantity_text": "18 826",
+      "security": "actions",
+      "price_eur": "3,60",
+      "resulting_holding": "4 351 894 actions et 4 325 158 droits de vote**",
+      "document_url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C0995/837D6483A4C7B34DFE1CF9952FC5F1EF58A4E04D939740256D590B54443E0CE2.pdf",
+      "document_file": "pdfs/226C0995.pdf"
+    },
+    {
+      "amf_number": "226C0994",
+      "target": "SOCIETE DE LA TOUR EIFFEL",
+      "filer": "SMABTP",
+      "operation": "achat le 06/07/2026",
+      "operation_type": "buy",
+      "transaction_date": "2026-07-06",
+      "published_at": "2026-07-07T15:22:02.9909923+02:00",
+      "online_at": "2026-07-07T15:22:01.967",
+      "date_information": "2026-07-07T00:00:00",
+      "isin": "FR0000036816",
+      "instrument_type": "Shares",
+      "quantity": 1750800,
+      "quantity_text": "1 750 800",
+      "security": "actions",
+      "price_eur": "8,20",
+      "resulting_holding": "78 692 409 actions et droits de vote**/***",
+      "document_url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C0994/44F9C7BC9AF9D70A85E4493A4C75FC5B8232553E0655B180B7CB90E4A1AA6695.pdf",
+      "document_file": "pdfs/226C0994.pdf"
+    },
+    {
+      "amf_number": "226C0993",
+      "target": "ADEUNIS",
+      "filer": "Webdyn SAS",
+      "operation": "achat le 06/07/2026",
+      "operation_type": "buy",
+      "transaction_date": "2026-07-06",
+      "published_at": "2026-07-07T15:18:03.0725685+02:00",
+      "online_at": "2026-07-07T15:18:01.917",
+      "date_information": "2026-07-07T00:00:00",
+      "isin": "FR0013284627",
+      "instrument_type": "Shares",
+      "quantity": 3072,
+      "quantity_text": "3 072",
+      "security": "actions",
+      "price_eur": "0,84",
+      "resulting_holding": "3 812 723 actions et droits de vote",
+      "document_url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C0993/69076E8F934F69B22CD5E844F34598337AB2BBF825378429B885CE21504C0104.pdf",
+      "document_file": "pdfs/226C0993.pdf"
     }
   ]
 }

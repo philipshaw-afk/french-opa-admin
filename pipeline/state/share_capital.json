@@ -572,6 +572,13 @@
         "total": 175873471,
         "voting_rights": 323013349,
         "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ACT/2026/06/FCACT080100_20260615.pdf"
+      },
+      {
+        "date": "2026-07-07",
+        "as_at": "2026-06-30",
+        "total": 175873471,
+        "voting_rights": 168800909,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ACT/2026/07/FCACT080444_20260707.pdf"
       }
     ]
   },
