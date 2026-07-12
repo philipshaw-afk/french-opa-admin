@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-11T07:20:53.476Z",
+  "generated_at": "2026-07-12T07:38:40.375Z",
   "source": {
     "bdif_endpoint": "https://bdif.amf-france.org/back/api/v1/informations?TypesInformation=OPA&TypesDocument=DeclarationAchatVente&From=0&Size=100",
     "amf_takeover_reporting_page": "https://www.amf-france.org/en/professionals/professional-investors/my-relations-amf/takeover-reporting",
