@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-18T07:12:09+00:00",
+  "generated_at": "2026-07-19T07:37:00+00:00",
   "source": {
-    "bdif_endpoint": "https://bdif.amf-france.org/back/api/v1/informations?TypesInformation=OPA&TypesDocument=DeclarationAchatVente&From=0&Size=500&DateDebut=2026-07-11T00%3A00%3A00.000Z",
+    "bdif_endpoint": "https://bdif.amf-france.org/back/api/v1/informations?TypesInformation=OPA&TypesDocument=DeclarationAchatVente&From=0&Size=500&DateDebut=2026-07-12T00%3A00%3A00.000Z",
     "amf_takeover_reporting_page": "https://www.amf-france.org/en/professionals/professional-investors/my-relations-amf/takeover-reporting",
     "offer_period_company_list": {
       "url": "https://www.amf-france.org/sites/institutionnel/files/private/2026-07/tableau-opa-disclosure-table-9-juillet-2026_1.xlsx",
