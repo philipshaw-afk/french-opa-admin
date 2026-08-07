@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-06T07:57:24.558Z",
+  "generated_at": "2026-08-07T06:35:47.631Z",
   "source": {
     "bdif_endpoint": "https://bdif.amf-france.org/back/api/v1/informations?TypesInformation=OPA&TypesDocument=DeclarationAchatVente&From=0&Size=100",
     "amf_takeover_reporting_page": "https://www.amf-france.org/en/professionals/professional-investors/my-relations-amf/takeover-reporting",
@@ -24,7 +24,7 @@
   },
   "total_available_reported_by_bdif": 10000,
   "pulled_count_before_target_filter": 100,
-  "matched_count": 902,
+  "matched_count": 909,
   "filings": [
     {
       "amf_number": "226C0798",
@@ -23476,6 +23476,188 @@
         "url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1208/B8BE13C71F0FD2D28FCEC3DF0F8082AD5AEBD79BE728EB76A9251FDB682E7396.pdf",
         "format": "PDF",
         "local_pdf": "pdfs/226C1208.pdf"
+      }
+    },
+    {
+      "amf_number": "226C1225",
+      "amf_reference": "226C1225",
+      "title": null,
+      "published_at": "2026-08-06T18:14:05.1051438+02:00",
+      "online_at": "2026-08-06T18:14:03.647",
+      "date_information": "2026-08-06T00:00:00",
+      "target": {
+        "token": "RS00001153",
+        "name": "LEXIBOOK",
+        "role": "SocieteConcernee"
+      },
+      "types_information": [
+        "OPA"
+      ],
+      "types_document": [
+        "DeclarationAchatVente"
+      ],
+      "document": {
+        "filename": "226C1225.pdf",
+        "path": "2026/226C1225/7887934E56C4BF54B2A7070D8FCA0F4BD56E1244E2B8F3802E74FCED4873D2C4.pdf",
+        "url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1225/7887934E56C4BF54B2A7070D8FCA0F4BD56E1244E2B8F3802E74FCED4873D2C4.pdf",
+        "format": "PDF",
+        "local_pdf": "pdfs/226C1225.pdf"
+      }
+    },
+    {
+      "amf_number": "226C1224",
+      "amf_reference": "226C1224",
+      "title": null,
+      "published_at": "2026-08-06T18:14:05.5512428+02:00",
+      "online_at": "2026-08-06T18:14:02.853",
+      "date_information": "2026-08-06T00:00:00",
+      "target": {
+        "token": "RS00005518",
+        "name": "FNAC DARTY",
+        "role": "SocieteConcernee"
+      },
+      "types_information": [
+        "OPA"
+      ],
+      "types_document": [
+        "DeclarationAchatVente"
+      ],
+      "document": {
+        "filename": "226C1224.pdf",
+        "path": "2026/226C1224/D8E8B8836068602C8A8BFA5DDCF23F768EC77710A3A9F6A5228C4D0FF4469F82.pdf",
+        "url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1224/D8E8B8836068602C8A8BFA5DDCF23F768EC77710A3A9F6A5228C4D0FF4469F82.pdf",
+        "format": "PDF",
+        "local_pdf": "pdfs/226C1224.pdf"
+      }
+    },
+    {
+      "amf_number": "226C1223",
+      "amf_reference": "226C1223",
+      "title": null,
+      "published_at": "2026-08-06T18:14:05.8747944+02:00",
+      "online_at": "2026-08-06T18:14:02.053",
+      "date_information": "2026-08-06T00:00:00",
+      "target": {
+        "token": "RS00005518",
+        "name": "FNAC DARTY",
+        "role": "SocieteConcernee"
+      },
+      "types_information": [
+        "OPA"
+      ],
+      "types_document": [
+        "DeclarationAchatVente"
+      ],
+      "document": {
+        "filename": "226C1223.pdf",
+        "path": "2026/226C1223/B08F6FB21D74760C3058120963A28C3299748589C786E592A1412040BC4E1380.pdf",
+        "url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1223/B08F6FB21D74760C3058120963A28C3299748589C786E592A1412040BC4E1380.pdf",
+        "format": "PDF",
+        "local_pdf": "pdfs/226C1223.pdf"
+      }
+    },
+    {
+      "amf_number": "226C1222",
+      "amf_reference": "226C1222",
+      "title": null,
+      "published_at": "2026-08-06T18:12:07.2857487+02:00",
+      "online_at": "2026-08-06T18:12:05.507",
+      "date_information": "2026-08-06T00:00:00",
+      "target": {
+        "token": "RS00005518",
+        "name": "FNAC DARTY",
+        "role": "SocieteConcernee"
+      },
+      "types_information": [
+        "OPA"
+      ],
+      "types_document": [
+        "DeclarationAchatVente"
+      ],
+      "document": {
+        "filename": "226C1222.pdf",
+        "path": "2026/226C1222/FB0EF5E98F2784CF6C3BE1C0F8A1ADE0111B0764069473C983F230E2C4C0A8FE.pdf",
+        "url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1222/FB0EF5E98F2784CF6C3BE1C0F8A1ADE0111B0764069473C983F230E2C4C0A8FE.pdf",
+        "format": "PDF",
+        "local_pdf": "pdfs/226C1222.pdf"
+      }
+    },
+    {
+      "amf_number": "226C1221",
+      "amf_reference": "226C1221",
+      "title": null,
+      "published_at": "2026-08-06T18:12:08.2893526+02:00",
+      "online_at": "2026-08-06T18:12:02.85",
+      "date_information": "2026-08-06T00:00:00",
+      "target": {
+        "token": "RS00002372",
+        "name": "EXAIL TECHNOLOGIES",
+        "role": "SocieteConcernee"
+      },
+      "types_information": [
+        "OPA"
+      ],
+      "types_document": [
+        "DeclarationAchatVente"
+      ],
+      "document": {
+        "filename": "226C1221.pdf",
+        "path": "2026/226C1221/81FA13790F94C73EC49321751D5C1B81B5BE8306CEA5099A907836164793CE0A.pdf",
+        "url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1221/81FA13790F94C73EC49321751D5C1B81B5BE8306CEA5099A907836164793CE0A.pdf",
+        "format": "PDF",
+        "local_pdf": "pdfs/226C1221.pdf"
+      }
+    },
+    {
+      "amf_number": "226C1220",
+      "amf_reference": "226C1220",
+      "title": null,
+      "published_at": "2026-08-06T18:10:09.9241641+02:00",
+      "online_at": "2026-08-06T18:10:05.36",
+      "date_information": "2026-08-06T00:00:00",
+      "target": {
+        "token": "RS00002372",
+        "name": "EXAIL TECHNOLOGIES",
+        "role": "SocieteConcernee"
+      },
+      "types_information": [
+        "OPA"
+      ],
+      "types_document": [
+        "DeclarationAchatVente"
+      ],
+      "document": {
+        "filename": "226C1220.pdf",
+        "path": "2026/226C1220/2C3531A2946EAC91B67FA0DE31B40A28966DD9C98E2919CCAC57E983304A09FD.pdf",
+        "url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1220/2C3531A2946EAC91B67FA0DE31B40A28966DD9C98E2919CCAC57E983304A09FD.pdf",
+        "format": "PDF",
+        "local_pdf": "pdfs/226C1220.pdf"
+      }
+    },
+    {
+      "amf_number": "226C1219",
+      "amf_reference": "226C1219",
+      "title": null,
+      "published_at": "2026-08-06T18:10:11.1264006+02:00",
+      "online_at": "2026-08-06T18:10:01.987",
+      "date_information": "2026-08-06T00:00:00",
+      "target": {
+        "token": "RS00006508",
+        "name": "ADEUNIS",
+        "role": "SocieteConcernee"
+      },
+      "types_information": [
+        "OPA"
+      ],
+      "types_document": [
+        "DeclarationAchatVente"
+      ],
+      "document": {
+        "filename": "226C1219.pdf",
+        "path": "2026/226C1219/4563D4919705E0473B54A6CA1ACDF631E9D62796415F809A2C112378B8A22516.pdf",
+        "url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1219/4563D4919705E0473B54A6CA1ACDF631E9D62796415F809A2C112378B8A22516.pdf",
+        "format": "PDF",
+        "local_pdf": "pdfs/226C1219.pdf"
       }
     }
   ]
