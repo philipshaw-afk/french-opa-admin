@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-27T16:33:58.160Z",
+  "generated_at": "2026-08-28T17:28:42.207Z",
   "source": {
     "bdif_endpoint": "https://bdif.amf-france.org/back/api/v1/informations?TypesInformation=OPA&TypesDocument=DeclarationAchatVente&From=0&Size=100",
     "amf_takeover_reporting_page": "https://www.amf-france.org/en/professionals/professional-investors/my-relations-amf/takeover-reporting",
@@ -24,7 +24,7 @@
   },
   "total_available_reported_by_bdif": 10000,
   "pulled_count_before_target_filter": 100,
-  "matched_count": 1008,
+  "matched_count": 1016,
   "filings": [
     {
       "amf_number": "226C0798",
@@ -26232,6 +26232,214 @@
         "url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1383/4C5BBE13FD1D7001F30CB90BB9F27735B4D8F3B843733B031CDCD61EC48BCD2B.pdf",
         "format": "PDF",
         "local_pdf": "pdfs/226C1383.pdf"
+      }
+    },
+    {
+      "amf_number": "226C1410",
+      "amf_reference": "226C1410",
+      "title": null,
+      "published_at": "2026-08-28T17:50:03.8394456+02:00",
+      "online_at": "2026-08-28T17:50:02.8",
+      "date_information": "2026-08-28T00:00:00",
+      "target": {
+        "token": "RS00002372",
+        "name": "EXAIL TECHNOLOGIES",
+        "role": "SocieteConcernee"
+      },
+      "types_information": [
+        "OPA"
+      ],
+      "types_document": [
+        "DeclarationAchatVente"
+      ],
+      "document": {
+        "filename": "226C1410.pdf",
+        "path": "2026/226C1410/08B561F83FDED1798D00F8C94375CFFEEB6A82A26B8AEFB09BCABBC6DDD86523.pdf",
+        "url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1410/08B561F83FDED1798D00F8C94375CFFEEB6A82A26B8AEFB09BCABBC6DDD86523.pdf",
+        "format": "PDF",
+        "local_pdf": "pdfs/226C1410.pdf"
+      }
+    },
+    {
+      "amf_number": "226C1403",
+      "amf_reference": "226C1403",
+      "title": null,
+      "published_at": "2026-08-28T17:40:04.7529735+02:00",
+      "online_at": "2026-08-28T17:40:03.487",
+      "date_information": "2026-08-28T00:00:00",
+      "target": {
+        "token": "RS00005518",
+        "name": "FNAC DARTY",
+        "role": "SocieteConcernee"
+      },
+      "types_information": [
+        "OPA"
+      ],
+      "types_document": [
+        "DeclarationAchatVente"
+      ],
+      "document": {
+        "filename": "226C1403.pdf",
+        "path": "2026/226C1403/D5DE89004B1DFF8F9A5D4A3831416018C19C3324AD29984B04AA0EB3ABEFF9DF.pdf",
+        "url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1403/D5DE89004B1DFF8F9A5D4A3831416018C19C3324AD29984B04AA0EB3ABEFF9DF.pdf",
+        "format": "PDF",
+        "local_pdf": "pdfs/226C1403.pdf"
+      }
+    },
+    {
+      "amf_number": "226C1402",
+      "amf_reference": "226C1402",
+      "title": null,
+      "published_at": "2026-08-28T17:40:05.254036+02:00",
+      "online_at": "2026-08-28T17:40:02.697",
+      "date_information": "2026-08-28T00:00:00",
+      "target": {
+        "token": "RS00005518",
+        "name": "FNAC DARTY",
+        "role": "SocieteConcernee"
+      },
+      "types_information": [
+        "OPA"
+      ],
+      "types_document": [
+        "DeclarationAchatVente"
+      ],
+      "document": {
+        "filename": "226C1402.pdf",
+        "path": "2026/226C1402/806F34F1A0A553E2D74B84D399EF0B800FEB5748AB2BDDFAB7308CC7F75CA9F3.pdf",
+        "url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1402/806F34F1A0A553E2D74B84D399EF0B800FEB5748AB2BDDFAB7308CC7F75CA9F3.pdf",
+        "format": "PDF",
+        "local_pdf": "pdfs/226C1402.pdf"
+      }
+    },
+    {
+      "amf_number": "226C1401",
+      "amf_reference": "226C1401",
+      "title": null,
+      "published_at": "2026-08-28T17:38:04.9097881+02:00",
+      "online_at": "2026-08-28T17:38:03.6",
+      "date_information": "2026-08-28T00:00:00",
+      "target": {
+        "token": "RS00002372",
+        "name": "EXAIL TECHNOLOGIES",
+        "role": "SocieteConcernee"
+      },
+      "types_information": [
+        "OPA"
+      ],
+      "types_document": [
+        "DeclarationAchatVente"
+      ],
+      "document": {
+        "filename": "226C1401.pdf",
+        "path": "2026/226C1401/6A86F9F59F58FF0D6394082370875446E22ED8EC9E9F803168C1F16D61BDEE8B.pdf",
+        "url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1401/6A86F9F59F58FF0D6394082370875446E22ED8EC9E9F803168C1F16D61BDEE8B.pdf",
+        "format": "PDF",
+        "local_pdf": "pdfs/226C1401.pdf"
+      }
+    },
+    {
+      "amf_number": "226C1400",
+      "amf_reference": "226C1400",
+      "title": null,
+      "published_at": "2026-08-28T17:38:05.4206306+02:00",
+      "online_at": "2026-08-28T17:38:02.763",
+      "date_information": "2026-08-28T00:00:00",
+      "target": {
+        "token": "RS00002372",
+        "name": "EXAIL TECHNOLOGIES",
+        "role": "SocieteConcernee"
+      },
+      "types_information": [
+        "OPA"
+      ],
+      "types_document": [
+        "DeclarationAchatVente"
+      ],
+      "document": {
+        "filename": "226C1400.pdf",
+        "path": "2026/226C1400/A7D2EAC9775308CEEA38BDAD5FB602D18955DDE84DE4DE4E61476AED52453347.pdf",
+        "url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1400/A7D2EAC9775308CEEA38BDAD5FB602D18955DDE84DE4DE4E61476AED52453347.pdf",
+        "format": "PDF",
+        "local_pdf": "pdfs/226C1400.pdf"
+      }
+    },
+    {
+      "amf_number": "226C1399",
+      "amf_reference": "226C1399",
+      "title": null,
+      "published_at": "2026-08-28T17:36:04.8675068+02:00",
+      "online_at": "2026-08-28T17:36:03.54",
+      "date_information": "2026-08-28T00:00:00",
+      "target": {
+        "token": "RS00002372",
+        "name": "EXAIL TECHNOLOGIES",
+        "role": "SocieteConcernee"
+      },
+      "types_information": [
+        "OPA"
+      ],
+      "types_document": [
+        "DeclarationAchatVente"
+      ],
+      "document": {
+        "filename": "226C1399.pdf",
+        "path": "2026/226C1399/B1C6B4CBD2323FBD27B019329ADED89C29BB8A93F26935432993E5B67D5E463D.pdf",
+        "url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1399/B1C6B4CBD2323FBD27B019329ADED89C29BB8A93F26935432993E5B67D5E463D.pdf",
+        "format": "PDF",
+        "local_pdf": "pdfs/226C1399.pdf"
+      }
+    },
+    {
+      "amf_number": "226C1398",
+      "amf_reference": "226C1398",
+      "title": null,
+      "published_at": "2026-08-28T17:36:05.3369665+02:00",
+      "online_at": "2026-08-28T17:36:02.72",
+      "date_information": "2026-08-28T00:00:00",
+      "target": {
+        "token": "RS00002372",
+        "name": "EXAIL TECHNOLOGIES",
+        "role": "SocieteConcernee"
+      },
+      "types_information": [
+        "OPA"
+      ],
+      "types_document": [
+        "DeclarationAchatVente"
+      ],
+      "document": {
+        "filename": "226C1398.pdf",
+        "path": "2026/226C1398/C8C11B602D0A50E74CF106EF9CB06AF5216194B66B9619670082911280872F70.pdf",
+        "url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1398/C8C11B602D0A50E74CF106EF9CB06AF5216194B66B9619670082911280872F70.pdf",
+        "format": "PDF",
+        "local_pdf": "pdfs/226C1398.pdf"
+      }
+    },
+    {
+      "amf_number": "226C1397",
+      "amf_reference": "226C1397",
+      "title": null,
+      "published_at": "2026-08-28T17:34:04.2812486+02:00",
+      "online_at": "2026-08-28T17:34:02.937",
+      "date_information": "2026-08-28T00:00:00",
+      "target": {
+        "token": "RS00002372",
+        "name": "EXAIL TECHNOLOGIES",
+        "role": "SocieteConcernee"
+      },
+      "types_information": [
+        "OPA"
+      ],
+      "types_document": [
+        "DeclarationAchatVente"
+      ],
+      "document": {
+        "filename": "226C1397.pdf",
+        "path": "2026/226C1397/5E7C5948DBB4C05A1CF2EADB973C8907E0304C5845C953093B2863065867E346.pdf",
+        "url": "https://bdif.amf-france.org/back/api/v1/documents/2026/226C1397/5E7C5948DBB4C05A1CF2EADB973C8907E0304C5845C953093B2863065867E346.pdf",
+        "format": "PDF",
+        "local_pdf": "pdfs/226C1397.pdf"
       }
     }
   ]
