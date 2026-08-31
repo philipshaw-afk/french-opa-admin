@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-08-30T10:31:08+00:00",
+  "generated_at": "2026-08-31T11:39:27+00:00",
   "source": {
     "bdif_endpoint": "https://bdif.amf-france.org/back/api/v1/informations?TypesInformation=OPA&TypesDocument=DeclarationAchatVente&From=0&Size=500&DateDebut=2026-08-23T00%3A00%3A00.000Z",
     "amf_takeover_reporting_page": "https://www.amf-france.org/en/professionals/professional-investors/my-relations-amf/takeover-reporting",
     "offer_period_company_list": {
-      "url": "https://www.amf-france.org/sites/institutionnel/files/private/2026-08/tableau-opa-disclosure-table-4%20ao%C3%BBt-2026_0.xlsx",
+      "url": "https://www.amf-france.org/sites/institutionnel/files/private/2026-08/tableau-opa-disclosure-table-31%20ao%C3%BBt-2026_0.xlsx",
       "local_file": "amf-current-offer-companies.xlsx"
     },
     "historic_zodiac_bdif_endpoint": "https://bdif.amf-france.org/back/api/v1/informations?TypesInformation=OPA&TypesDocument=DeclarationAchatVente&From=0&Size=600&DateDebut=2016-12-31T23%3A00%3A00.000Z&DateFin=2018-12-31T22%3A59%3A59.000Z&Jetons=RS00001661",
@@ -15213,7 +15213,7 @@
     }
   ],
   "offer_period_companies_from_amf_xlsx": {
-    "last_update": "2026-08-04",
+    "last_update": "2026-08-31",
     "companies": [
       {
         "offeree": "ENTREPRENDRE",
@@ -15262,6 +15262,13 @@
         "isin": "FR0000130692",
         "offeror": "COMPAGNIE CHARGEURS INVEST",
         "offer_announced": "2026-07-08",
+        "draft_offer_filed": null
+      },
+      {
+        "offeree": "SOCIETE FRANCAISE DE CASINOS",
+        "isin": "FR0010209809",
+        "offeror": "MERKUR SPIELBANKEN BETEILIGUNGS GMBH",
+        "offer_announced": "2026-08-28",
         "draft_offer_filed": null
       },
       {
