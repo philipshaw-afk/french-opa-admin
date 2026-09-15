@@ -478,8 +478,8 @@
     "status": "Pending"
   },
   "EAGLE FOOTBALL GROUP SA (OLYMPIQUE LYONNAIS)": {
-    "total": 163729743,
-    "date": "2026-07-05",
+    "total": 175873471,
+    "date": "2026-09-14",
     "status": "Pending",
     "history": [
       {
@@ -579,8 +579,16 @@
         "total": 175873471,
         "voting_rights": 168800909,
         "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ACT/2026/07/FCACT080444_20260707.pdf"
+      },
+      {
+        "date": "2026-09-14",
+        "as_at": null,
+        "total": 175873471,
+        "voting_rights": 168799035,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ACT/2026/09/FCACT081345_20260914.pdf"
       }
-    ]
+    ],
+    "source": "AMF 223-16 declaration (info-financiere.gouv.fr)"
   },
   "INFOCLIP SA": {
     "total": 532405,
