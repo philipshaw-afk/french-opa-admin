@@ -1,7 +1,8 @@
 {
-  "source": "C:\\Users\\phili\\Downloads\\French deals 5 years.xlsx",
+  "source": "C:\\Users\\phili\\Documents\\Claude docs\\French public data.xlsx (M&A Monitor export 15/09/2026)",
   "sheet": "Sheet 1",
-  "count": 87,
+  "count": 89,
+  "updated_at": "2026-09-24T13:26:36+00:00",
   "deals": [
     {
       "deal_number": "0037919",
@@ -97,7 +98,7 @@
       "status_of_deal": "Completed",
       "deal_attitude": "Friendly",
       "consideration_type": "Cash plus Contingent Payment in Cash",
-      "implied_total_equity_value": 2143,
+      "implied_total_equity_value": 2143.0,
       "disclosure_date_added": "",
       "disclosure_date_removed": "",
       "offeror_named": "",
@@ -1742,6 +1743,46 @@
       "disclosure_date_removed": "",
       "offeror_named": "",
       "target_ordinary_shares": 8294332
+    },
+    {
+      "deal_number": "0042748",
+      "date_announced": "2025-02-24",
+      "date_completed": "2026-07-07",
+      "target": "VINPAI SA",
+      "target_country": "France",
+      "target_activities": "PLANT BASED FLAVOUR INGREDIENTS PRODUCTION & DISTRIBUTION",
+      "industrial_sector": "Chemicals / Food Manufacturers",
+      "ultimate_bidder": "CAMLIN FINE SCIENCES LIMITED",
+      "bidder_country": "India",
+      "type_of_deal": "Public",
+      "status_of_deal": "Completed",
+      "deal_attitude": "Friendly",
+      "consideration_type": "Cash plus Ordinary Shares",
+      "implied_total_equity_value": 10.298,
+      "disclosure_date_added": "",
+      "disclosure_date_removed": "",
+      "offeror_named": "",
+      "target_ordinary_shares": 3461415
+    },
+    {
+      "deal_number": "0044148",
+      "date_announced": "2026-04-14",
+      "date_completed": "2026-07-03",
+      "target": "POULAILLON SA",
+      "target_country": "France",
+      "target_activities": "MANUFACTURE & SALE OF BAKERY, PASTRY PRODUCTS, CATERING & WATER",
+      "industrial_sector": "Food Manufacturers / Retailers (Food)",
+      "ultimate_bidder": "EUGENIE SAS",
+      "bidder_country": "France",
+      "type_of_deal": "Public Transaction (full bid for minorities).",
+      "status_of_deal": "Completed",
+      "deal_attitude": "Friendly",
+      "consideration_type": "Cash",
+      "implied_total_equity_value": 40.0,
+      "disclosure_date_added": "",
+      "disclosure_date_removed": "",
+      "offeror_named": "",
+      "target_ordinary_shares": 5111119
     }
   ]
 }

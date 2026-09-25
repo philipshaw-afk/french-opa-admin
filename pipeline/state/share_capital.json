@@ -416,8 +416,8 @@
     "status": "Completed"
   },
   "GROUPE PIZZORNO ENVIRONNEMENT SA": {
-    "total": 3864536,
-    "date": "2026-07-05",
+    "total": 4000000,
+    "date": "2026-06-09",
     "status": "Pending",
     "history": [
       {
@@ -434,12 +434,15 @@
         "voting_rights": 6874635,
         "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ACT/2026/06/FCACT080213_20260625.pdf"
       }
-    ]
+    ],
+    "source": "AMF 223-16 declaration (info-financiere.gouv.fr)",
+    "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ACT/2026/06/FCACT080213_20260625.pdf"
   },
   "ESSO SOCIETE ANONYME FRANCAISE SA": {
-    "total": 2199418,
+    "total": 12854578,
     "date": "2026-07-05",
-    "status": "Pending"
+    "status": "Pending",
+    "note": "Corrected 2026-09-24: seeded 2,199,418 was the number of shares bid for; now North Atlantic Energies (see that entry)."
   },
   "SOCIETE FERMIERE DU CASINO MUNICIPAL DE CANNES SA": {
     "total": 157664,
@@ -596,10 +599,63 @@
     "status": "Pending"
   },
   "PIERRE ET VACANCES": {
-    "total": 4619917,
-    "date": "2026-04-30",
+    "total": 462008714,
+    "date": "2026-08-05",
     "status": "Pending",
-    "note": "Seeded from AMF 223-16 declarations via info-financiere.gouv.fr (37 consistent monthly points; latest as at 30/04/2026)."
+    "source": "AMF 223-16 declaration (info-financiere.gouv.fr)",
+    "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/BWR/2026/09/FCBWR169314_20260908.pdf",
+    "note": "Corrected 2026-09-24: previous figure (4,619,917) was the share capital in euros (nominal EUR 0.01), not the share count."
   },
-  "_note_capital_history": "History arrays are maintained automatically from AMF 223-16 declarations (last 24 months only). Parsed totals are validated against disclosed positions and the existing figure; the entry's total/date is only replaced by a NEWER declaration, and never when the entry has \"manual\": true."
+  "_note_capital_history": "History arrays are maintained automatically from AMF 223-16 declarations (last 24 months only). Parsed totals are validated against disclosed positions and the existing figure; the entry's total/date is only replaced by a NEWER declaration, and never when the entry has \"manual\": true.",
+  "EXAIL TECHNOLOGIES": {
+    "total": 17044747,
+    "date": "2026-05-13",
+    "status": "Pending",
+    "source": "AMF 223-16 declaration (info-financiere.gouv.fr)",
+    "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ACT/2026/05/FCACT079847_20260527.pdf"
+  },
+  "VOYAGEURS DU MONDE": {
+    "total": 4488726,
+    "date": "2026-08-31",
+    "status": "Pending",
+    "source": "AMF 223-16 declaration (info-financiere.gouv.fr)",
+    "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/376/2026/09/FC376645443_20260910.pdf"
+  },
+  "ADEUNIS": {
+    "total": 4595540,
+    "date": "2025-02-28",
+    "status": "Pending",
+    "source": "AMF 223-16 declaration (info-financiere.gouv.fr)",
+    "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ACT/2025/03/FCACT073275_20250307.pdf",
+    "note": "Latest 223-16 declaration found (March 2025)."
+  },
+  "NORTH ATLANTIC ENERGIES": {
+    "total": 12854578,
+    "date": "2026-05-22",
+    "status": "Pending",
+    "source": "AMF threshold-crossing decision 226C (info-financiere.gouv.fr)",
+    "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/307/8888/01/FC307629814_20260522.pdf",
+    "note": "Formerly Esso S.A.F.; capital of 12,854,578 shares per the AMF notice of 22 May 2026."
+  },
+  "GAUMONT": {
+    "total": 3119923,
+    "date": "2026-05-31",
+    "status": "Pending",
+    "source": "AMF 223-16 declaration (info-financiere.gouv.fr)",
+    "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2026/06/FCMKW135740_20260605.pdf"
+  },
+  "COMPAGNIE CHARGEURS INVEST": {
+    "total": 24933990,
+    "date": "2026-08-31",
+    "status": "Pending",
+    "source": "AMF 223-16 declaration (info-financiere.gouv.fr)",
+    "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2026/09/FCECO083059_20260902.pdf"
+  },
+  "FIDUCIAL OFFICE SOLUTIONS": {
+    "total": 2169232,
+    "date": "2025-02-28",
+    "status": "Pending",
+    "source": "AMF 223-16 declaration (info-financiere.gouv.fr)",
+    "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ACT/2025/03/FCACT073222_20250305.pdf"
+  }
 }

@@ -1271,9 +1271,11 @@ TEMPLATE = r"""<!doctype html>
             <div><span>Saved records:</span><strong>${companyLinks.length}</strong></div>
           </div>
         </div>
-        <div class="toolbar" style="grid-template-columns: minmax(240px, 430px) 90px;">
+        ${renderLinkReview()}
+        <div class="toolbar" style="grid-template-columns: minmax(240px, 430px) 90px 220px;">
           <label>Search<input id="companySearch" type="search" value="${escAttr(state.companySearch)}" placeholder="Company or shared name"></label>
           <button id="companyReset" type="button">Reset</button>
+          <button id="companyExport" type="button" title="Download company_links.json with the approved links, including any saved in this browser, to upload to pipeline/state/ in the admin repository">Export links file</button>
         </div>
         <div class="table-meta">${filtered.length} companies shown</div>
         <div class="table-scroll">
@@ -1303,6 +1305,27 @@ TEMPLATE = r"""<!doctype html>
         state.companySearch = "";
         renderManageCompanies();
       });
+      document.querySelector("#companyExport").addEventListener("click", exportCompanyLinksFile);
+      document.querySelectorAll("[data-accept-suggestion]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const suggestion = openLinkSuggestions().find((item) => suggestionKey(item) === button.dataset.acceptSuggestion);
+          if (!suggestion) return;
+          suggestion.names
+            .filter((name) => normaliseCompanyKey(name) !== normaliseCompanyKey(suggestion.shared))
+            .forEach((name) => saveCompanyLink(name, suggestion.shared, companyTypeForSource(name)));
+          renderManageCompanies();
+        });
+      });
+      document.querySelectorAll("[data-reject-suggestion]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const suggestion = openLinkSuggestions().find((item) => suggestionKey(item) === button.dataset.rejectSuggestion);
+          if (!suggestion) return;
+          const pairs = loadRejectedLinks();
+          suggestion.names.forEach((a, i) => suggestion.names.slice(i + 1).forEach((b) => pairs.push([a, b])));
+          saveRejectedLinks(pairs);
+          renderManageCompanies();
+        });
+      });
       document.querySelectorAll("[data-save-company]").forEach((button) => {
         button.addEventListener("click", () => {
           const sourceName = button.dataset.saveCompany;
@@ -1324,15 +1347,54 @@ TEMPLATE = r"""<!doctype html>
       });
     }
 
+    function renderLinkReview() {
+      const suggestions = openLinkSuggestions();
+      const fragments = DATA.company_link_review?.fragments || [];
+      const autoCount = serverCompanyLinks.filter((entry) => !entry.rule.startsWith("approved")).length;
+      const approvedCount = serverCompanyLinks.filter((entry) => entry.rule.startsWith("approved")).length;
+      return `
+        <div class="summary-note">
+          ${fmtNumber(autoCount)} names are linked automatically (same name apart from case, punctuation or legal form, or a shortened name)
+          and ${fmtNumber(approvedCount)} by approved links. Links saved here with <b>Save</b> apply in this browser only &mdash;
+          use <b>Export links file</b> and upload it to <code>pipeline/state/company_links.json</code> to make them permanent.
+        </div>
+        ${suggestions.length ? `
+        <div class="table-meta">Suggested links to review (${suggestions.length}) &mdash; same brand or an incomplete name; these may be different entities</div>
+        <div class="table-scroll" style="margin-bottom:18px">
+          <table>
+            <thead><tr><th>Names</th><th style="width:260px">Would be shown as</th><th style="width:300px">Why suggested</th><th style="width:190px"></th></tr></thead>
+            <tbody>
+              ${suggestions.map((suggestion) => `
+                <tr>
+                  <td>${suggestion.names.map(esc).join("<br>")}</td>
+                  <td>${esc(suggestion.shared)}</td>
+                  <td class="muted">${esc(suggestion.reason)}</td>
+                  <td>
+                    <button class="button-primary" type="button" data-accept-suggestion="${escAttr(suggestionKey(suggestion))}">Link</button>
+                    <button type="button" data-reject-suggestion="${escAttr(suggestionKey(suggestion))}">Not the same</button>
+                  </td>
+                </tr>`).join("")}
+            </tbody>
+          </table>
+        </div>` : ""}
+        ${fragments.length ? `
+        <details style="margin-bottom:18px">
+          <summary class="table-meta" style="cursor:pointer">Incomplete names from the filings (${fragments.length}) &mdash; the PDF reader cut these short, so they cannot be matched by name</summary>
+          <div class="muted" style="padding:8px 0">${fragments.map((item) => `${esc(item.name)} (${fmtNumber(item.rows)})`).join(" &middot; ")}</div>
+        </details>` : ""}
+      `;
+    }
+
     function companyManageRow(row) {
       const aliases = companyAliases(row.sourceName, row.sharedName);
+      const rule = companyLinkRule(row.sourceName);
       return `
         <tr>
           <td>${esc(row.sourceName)}</td>
           <td><input data-company-shared value="${escAttr(row.sharedName)}"></td>
           <td><select data-company-type>${companyTypeOptions(row.type)}</select></td>
           <td>${fmtNumber(row.rows)}</td>
-          <td>${aliases.length ? esc(aliases.join(", ")) : `<span class="muted">None</span>`}</td>
+          <td>${aliases.length ? esc(aliases.join(", ")) : `<span class="muted">None</span>`}${rule ? `<div class="muted" style="font-size:12px">${esc(rule)}</div>` : ""}</td>
           <td>
             <button class="button-primary" type="button" data-save-company="${escAttr(row.sourceName)}">Save</button>
             <a href="#" data-clear-company="${escAttr(row.sourceName)}">Clear</a>
@@ -1565,18 +1627,33 @@ TEMPLATE = r"""<!doctype html>
           || companyTypeForSource(filer);
         investor.companyType = groupType || investor.companyType || "Unassigned";
 
+        // Each legal entity keeps its own latest position; entities linked by an
+        // approved group (e.g. Fidera GP + Fidera Group) are added together.
+        investor.entities = investor.entities || new Map();
         group.rows.forEach((row) => {
+          const entityKey = registerEntityName(row.filer);
+          if (!investor.entities.has(entityKey)) {
+            investor.entities.set(entityKey, { shareLong: null, derivativeLong: null, short: null });
+          }
+          const entity = investor.entities.get(entityKey);
           const holding = parseHolding(row.resulting_holding);
           if (holding.value != null) {
             if (row.instrument_type === "Shares") {
-              if (holding.kind === "short") investor.short = holding.value;
-              else investor.shareLong = holding.value;
+              if (holding.kind === "short") entity.short = holding.value;
+              else entity.shareLong = holding.value;
             } else if (row.instrument_type === "Derivative") {
-              if (holding.kind === "short") investor.short = holding.value;
-              else investor.derivativeLong = holding.value;
+              if (holding.kind === "short") entity.short = holding.value;
+              else entity.derivativeLong = holding.value;
             }
           }
         });
+        const sumEntities = (field) => {
+          const values = [...investor.entities.values()].map((entity) => entity[field]).filter((value) => value != null);
+          return values.length ? values.reduce((total, value) => total + Number(value), 0) : null;
+        };
+        investor.shareLong = sumEntities("shareLong");
+        investor.derivativeLong = sumEntities("derivativeLong");
+        investor.short = sumEntities("short");
 
         const snapshot = investorSnapshot(investor, denominator);
         if (investor.initialLong == null && (snapshot.currentLong || snapshot.currentShort)) {
@@ -2603,9 +2680,116 @@ TEMPLATE = r"""<!doctype html>
       localStorage.setItem(COMPANY_LINKS_STORAGE_KEY, JSON.stringify(companyLinks));
     }
 
+    // Links saved in the site data (pipeline/state/company_links.json) apply for
+    // everyone; links saved with the Save button in this browser override them.
+    const serverCompanyLinks = (DATA.company_links || []).map((entry) => ({
+      sourceName: String(entry.sourceName || "").trim(),
+      sharedName: String(entry.sharedName || entry.sourceName || "").trim(),
+      type: "Unassigned",
+      rule: entry.rule || "auto",
+    })).filter((entry) => entry.sourceName && entry.sharedName);
+    const REJECTED_LINKS_STORAGE_KEY = "frenchOpaRejectedCompanyLinks";
+
     function companyLinkForSource(sourceName) {
       const key = normaliseCompanyKey(sourceName);
-      return companyLinks.find((entry) => normaliseCompanyKey(entry.sourceName) === key) || null;
+      return companyLinks.find((entry) => normaliseCompanyKey(entry.sourceName) === key)
+        || serverCompanyLinks.find((entry) => normaliseCompanyKey(entry.sourceName) === key)
+        || null;
+    }
+
+    // Name used to keep separate legal entities apart inside one register row:
+    // spelling variants count as one filer (latest filing wins); names in an
+    // approved group marked "separate entities" (e.g. Fidera GP + Fidera Group)
+    // each keep their own position and are added together.
+    function registerEntityName(sourceName) {
+      const key = normaliseCompanyKey(sourceName);
+      const server = serverCompanyLinks.find((entry) => normaliseCompanyKey(entry.sourceName) === key);
+      if (server && server.rule === "approved (separate entities)") return sourceName;
+      return canonicalCompanyName(sourceName);
+    }
+
+    function companyLinkRule(sourceName) {
+      const key = normaliseCompanyKey(sourceName);
+      if (companyLinks.some((entry) => normaliseCompanyKey(entry.sourceName) === key)) return "Saved in this browser";
+      const server = serverCompanyLinks.find((entry) => normaliseCompanyKey(entry.sourceName) === key);
+      if (!server) return "";
+      if (server.rule === "approved (separate entities)") return "Approved (separate entities, positions added)";
+      return server.rule === "approved" ? "Approved" : `Auto: ${server.rule}`;
+    }
+
+    function loadRejectedLinks() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(REJECTED_LINKS_STORAGE_KEY) || "[]");
+        return Array.isArray(parsed) ? parsed.filter((pair) => Array.isArray(pair) && pair.length === 2) : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveRejectedLinks(pairs) {
+      try { localStorage.setItem(REJECTED_LINKS_STORAGE_KEY, JSON.stringify(pairs)); } catch {}
+    }
+
+    function suggestionKey(suggestion) {
+      return [...suggestion.names].sort().join("||");
+    }
+
+    function openLinkSuggestions() {
+      const rejected = new Set(loadRejectedLinks().map((pair) => [...pair].sort().join("||")));
+      return (DATA.company_link_review?.suggestions || []).filter((suggestion) => {
+        const shared = new Set(suggestion.names.map((name) => normaliseCompanyKey(canonicalCompanyName(name))));
+        if (shared.size < 2) return false;
+        const pairs = [];
+        suggestion.names.forEach((a, i) => suggestion.names.slice(i + 1).forEach((b) => pairs.push([a, b].sort().join("||"))));
+        return !pairs.every((pair) => rejected.has(pair));
+      });
+    }
+
+    function exportCompanyLinksFile() {
+      const review = DATA.company_link_review || {};
+      const approved = (review.approved || []).map((group) => ({
+        names: [...group.names],
+        shared: group.shared,
+        ...(group.separate_entities ? { separate_entities: true } : {}),
+      }));
+      const byShared = new Map();
+      companyLinks
+        .filter((entry) => normaliseCompanyKey(entry.sourceName) !== normaliseCompanyKey(entry.sharedName))
+        .forEach((entry) => {
+          const key = normaliseCompanyKey(entry.sharedName);
+          if (!byShared.has(key)) byShared.set(key, { names: new Set(), shared: entry.sharedName });
+          byShared.get(key).names.add(entry.sourceName);
+          if (managedCompanyRows().some((row) => normaliseCompanyKey(row.sourceName) === key)) {
+            byShared.get(key).names.add(entry.sharedName);
+          }
+        });
+      byShared.forEach((group) => {
+        const names = [...group.names];
+        const existing = approved.find((item) =>
+          normaliseCompanyKey(item.shared) === normaliseCompanyKey(group.shared)
+          || item.names.some((name) => names.includes(name))
+        );
+        if (existing) {
+          names.forEach((name) => { if (!existing.names.includes(name)) existing.names.push(name); });
+          existing.shared = group.shared;
+        } else if (names.length) {
+          approved.push({ names: names.includes(group.shared) ? names : [...names], shared: group.shared });
+        }
+      });
+      const rejectedKeys = new Set();
+      const rejected = [...(review.rejected || []), ...loadRejectedLinks()].filter((pair) => {
+        const key = [...pair].sort().join("||");
+        if (rejectedKeys.has(key)) return false;
+        rejectedKeys.add(key);
+        return true;
+      });
+      const payload = {
+        _note: "Upload to pipeline/state/company_links.json in the french-opa-admin repository. "
+          + "'approved' and 'rejected' are kept; the daily build recomputes the rest.",
+        approved,
+        rejected,
+      };
+      download("company_links.json", JSON.stringify(payload, null, 2), "application/json");
     }
 
     function canonicalCompanyName(sourceName) {
@@ -2648,7 +2832,7 @@ TEMPLATE = r"""<!doctype html>
       const sourceNames = unique([
         ...counts.keys(),
         ...companyLinks.map((entry) => entry.sourceName),
-      ]);
+      ].filter((name) => counts.has(name) || companyLinks.some((entry) => entry.sourceName === name)));
       return sourceNames.map((sourceName) => ({
         sourceName,
         sharedName: canonicalCompanyName(sourceName),
@@ -3455,6 +3639,27 @@ def build_share_capital_entries(payload):
     return entries
 
 
+def add_company_links(payload):
+    """Link filer names that are the same firm written differently (see
+    pipeline/company_links.py and state/company_links.json)."""
+    from collections import Counter, defaultdict
+    import company_links
+
+    counts = Counter(row.get("filer") for row in payload.get("transactions", []) if row.get("filer"))
+    targets = defaultdict(set)
+    for row in payload.get("transactions", []):
+        if row.get("filer") and row.get("target"):
+            targets[row["filer"]].add(row["target"])
+    result = company_links.refresh_state(counts, targets)
+    payload["company_links"] = result["links"]
+    payload["company_link_review"] = {
+        "approved": company_links.load_state().get("approved", []),
+        "rejected": company_links.load_state().get("rejected", []),
+        "suggestions": result["suggestions"],
+        "fragments": result["fragments"],
+    }
+
+
 def main():
     payload = json.loads(SOURCE.read_text(encoding="utf-8"))
     if FIVE_YEAR_DEALS.exists():
@@ -3467,6 +3672,7 @@ def main():
     if EUROPE_SOURCE.exists():
         payload["europe_regulatory"] = json.loads(EUROPE_SOURCE.read_text(encoding="utf-8"))
     payload["share_capital_entries"] = build_share_capital_entries(payload)
+    add_company_links(payload)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     OUT.write_text(TEMPLATE.replace("__DATA__", json.dumps(payload, ensure_ascii=False)), encoding="utf-8")
     print(OUT)

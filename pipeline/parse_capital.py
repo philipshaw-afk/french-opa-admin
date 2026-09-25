@@ -25,12 +25,27 @@ NUM_RE = re.compile(r"\d{1,3}(?:[ .]\d{3})+|\d{4,}")
 DATE_FR_RE = re.compile(r"(\d{1,2})(?:er)?\s+(janvier|fevrier|mars|avril|mai|juin|juillet|aout|septembre|octobre|novembre|decembre)\s+(\d{4})")
 DATE_NUM_RE = re.compile(r"(\d{1,2})[/.](\d{1,2})[/.](\d{4})")
 
+# "Societe anonyme au capital de 4.620.044,74 euros" is the share capital in
+# EUROS, not the number of shares; strip it before looking for share counts.
+CAPITAL_IN_EUROS_RE = re.compile(
+    r"capital(?:\s+social)?\s*(?:de|:)?\s*\d[\d .,]*\s*(?:euros?\b|eur\b|\u20ac)"
+)
+
+# Company registration numbers ("316 580 869 R.C.S. Paris", "RCS Nanterre
+# 562 018 002", "SIREN 390 474 898") look like share counts; strip them too.
+REGISTRATION_RE = re.compile(
+    r"\d{3}[ .]?\d{3}[ .]?\d{3}\s*(?:r\.?\s*c\.?\s*s\b\.?|rcs\b)"
+    r"|(?:r\.?\s*c\.?\s*s\b\.?|rcs\b|siren|siret)\s*(?:[a-z'-]+\s*){0,3}:?\s*\d{3}[ .]?\d{3}[ .]?\d{3}(?:[ .]?\d{5})?"
+)
+
 ANCHORS = [
     "actions composant le capital",
     "nombre total d'actions",
     "nombre total d actions",
     "actions composing the share capital",
     "total number of shares",
+    "nombre d'actions",
+    "nombre d actions",
 ]
 
 
@@ -79,6 +94,8 @@ def parse_pdf(path):
         return {"error": f"pdf read failed: {error}"}
     text = text.replace(" ", " ").replace(" ", " ").replace("’", "'")
     plain = strip_accents(text.lower())
+    plain = CAPITAL_IN_EUROS_RE.sub(" ", plain)
+    plain = REGISTRATION_RE.sub(" ", plain)
 
     # The anchor phrase usually appears both in the title and in the table
     # header; the table (with the actual figures) comes later, so try anchor
@@ -98,6 +115,7 @@ def parse_pdf(path):
 
     def numbers_in(chunk):
         found = []
+        chunk = DATE_NUM_RE.sub(" ", chunk)  # "31.08.2026" is not "08.202"
         for m in NUM_RE.finditer(chunk):
             value = parse_number(m.group())
             if value >= 5000:  # skips years, article numbers, small figures
@@ -111,7 +129,9 @@ def parse_pdf(path):
         else:
             window = plain[max(0, anchor - 200):anchor + 800]
             after_anchor = plain[anchor:anchor + 800]
-        numbers = numbers_in(window)
+        # Prefer figures after the anchor (the table), so postcodes and other
+        # header numbers just before it are not mistaken for the share count.
+        numbers = numbers_in(after_anchor) or numbers_in(window)
         if numbers:
             return {
                 "shares": numbers[0],
