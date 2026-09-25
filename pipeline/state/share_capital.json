@@ -447,12 +447,164 @@
   "SOCIETE FERMIERE DU CASINO MUNICIPAL DE CANNES SA": {
     "total": 157664,
     "date": "2026-07-05",
-    "status": "Pending"
+    "status": "Pending",
+    "history": [
+      {
+        "date": "2025-07-29",
+        "as_at": null,
+        "total": 157664,
+        "voting_rights": null,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2025/07/FCECO079296_20250729.pdf"
+      }
+    ]
   },
   "FNAC DARTY SA": {
-    "total": 29107842,
-    "date": "2026-07-05",
-    "status": "Pending"
+    "total": 29682146,
+    "date": "2026-08-31",
+    "status": "Pending",
+    "history": [
+      {
+        "date": "2025-04-01",
+        "as_at": "2025-03-31",
+        "total": 29682146,
+        "voting_rights": 29682146,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2025/04/FCMKW137569_20250401.pdf"
+      },
+      {
+        "date": "2025-04-22",
+        "as_at": "2025-04-17",
+        "total": 29682146,
+        "voting_rights": 29682146,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2025/04/FCMKW131542_20250422.pdf"
+      },
+      {
+        "date": "2025-05-05",
+        "as_at": "2025-04-30",
+        "total": 29682146,
+        "voting_rights": 29682146,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2025/05/FCMKW134647_20250505.pdf"
+      },
+      {
+        "date": "2025-06-02",
+        "as_at": "2025-05-31",
+        "total": 29682146,
+        "voting_rights": 29682146,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2025/06/FCMKW130324_20250602.pdf"
+      },
+      {
+        "date": "2025-07-03",
+        "as_at": "2025-06-30",
+        "total": 29682146,
+        "voting_rights": 29682146,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2025/07/FCMKW136299_20250703.pdf"
+      },
+      {
+        "date": "2025-08-04",
+        "as_at": "2025-07-31",
+        "total": 29682146,
+        "voting_rights": 29682146,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2025/08/FCMKW131269_20250804.pdf"
+      },
+      {
+        "date": "2025-09-01",
+        "as_at": "2025-08-31",
+        "total": 29682146,
+        "voting_rights": 29682146,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2025/09/FCMKW135715_20250901.pdf"
+      },
+      {
+        "date": "2025-10-03",
+        "as_at": "2025-09-30",
+        "total": 29682146,
+        "voting_rights": 29682146,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2025/10/FCMKW131424_20251003.pdf"
+      },
+      {
+        "date": "2025-11-03",
+        "as_at": "2025-10-31",
+        "total": 29682146,
+        "voting_rights": 29682146,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2025/11/FCMKW136677_20251103.pdf"
+      },
+      {
+        "date": "2025-12-01",
+        "as_at": "2025-11-30",
+        "total": 29682146,
+        "voting_rights": 29682146,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2025/12/FCMKW132188_20251201.pdf"
+      },
+      {
+        "date": "2026-01-05",
+        "as_at": "2025-12-31",
+        "total": 29682146,
+        "voting_rights": 29682146,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2026/01/FCMKW137711_20260105.pdf"
+      },
+      {
+        "date": "2026-02-02",
+        "as_at": "2026-01-31",
+        "total": 29682146,
+        "voting_rights": 29682146,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2026/02/FCMKW132589_20260202.pdf"
+      },
+      {
+        "date": "2026-03-02",
+        "as_at": "2026-02-28",
+        "total": 29682146,
+        "voting_rights": 29682146,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2026/03/FCMKW137560_20260302.pdf"
+      },
+      {
+        "date": "2026-04-02",
+        "as_at": "2026-03-31",
+        "total": 29682146,
+        "voting_rights": 29682146,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2026/04/FCMKW133903_20260402.pdf"
+      },
+      {
+        "date": "2026-04-23",
+        "as_at": "2026-04-22",
+        "total": 29682146,
+        "voting_rights": 29682146,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2026/04/FCMKW137622_20260423.pdf"
+      },
+      {
+        "date": "2026-05-04",
+        "as_at": "2026-04-30",
+        "total": 29682146,
+        "voting_rights": 29682146,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2026/05/FCMKW139829_20260504.pdf"
+      },
+      {
+        "date": "2026-06-01",
+        "as_at": "2026-05-31",
+        "total": 29682146,
+        "voting_rights": 29682146,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2026/06/FCMKW135222_20260601.pdf"
+      },
+      {
+        "date": "2026-07-02",
+        "as_at": "2026-06-30",
+        "total": 29682146,
+        "voting_rights": 29682146,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2026/07/FCMKW130852_20260702.pdf"
+      },
+      {
+        "date": "2026-08-03",
+        "as_at": "2026-07-31",
+        "total": 29682146,
+        "voting_rights": 29682146,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2026/08/FCMKW135775_20260803.pdf"
+      },
+      {
+        "date": "2026-09-02",
+        "as_at": "2026-08-31",
+        "total": 29682146,
+        "voting_rights": 29682146,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2026/09/FCMKW130614_20260902.pdf"
+      }
+    ],
+    "source": "AMF 223-16 declaration (info-financiere.gouv.fr)"
   },
   "VINPAI SA": {
     "total": 4561415,
@@ -609,17 +761,175 @@
   "_note_capital_history": "History arrays are maintained automatically from AMF 223-16 declarations (last 24 months only). Parsed totals are validated against disclosed positions and the existing figure; the entry's total/date is only replaced by a NEWER declaration, and never when the entry has \"manual\": true.",
   "EXAIL TECHNOLOGIES": {
     "total": 17044747,
-    "date": "2026-05-13",
+    "date": "2026-06-19",
     "status": "Pending",
     "source": "AMF 223-16 declaration (info-financiere.gouv.fr)",
-    "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ACT/2026/05/FCACT079847_20260527.pdf"
+    "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ACT/2026/05/FCACT079847_20260527.pdf",
+    "history": [
+      {
+        "date": "2025-06-05",
+        "as_at": "2025-06-25",
+        "total": 17424747,
+        "voting_rights": 24977760,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ACT/2025/06/FCACT074704_20250605.pdf"
+      },
+      {
+        "date": "2025-06-06",
+        "as_at": "2025-06-04",
+        "total": 17424747,
+        "voting_rights": 24977760,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ACT/2025/06/FCACT074731_20250606.pdf"
+      },
+      {
+        "date": "2025-10-08",
+        "as_at": "2025-10-02",
+        "total": 17424747,
+        "voting_rights": 24063187,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ACT/2025/10/FCACT076595_20251008.pdf"
+      },
+      {
+        "date": "2026-03-20",
+        "as_at": "2026-03-20",
+        "total": 17044747,
+        "voting_rights": 23643419,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ACT/2026/03/FCACT078757_20260320.pdf"
+      },
+      {
+        "date": "2026-03-25",
+        "as_at": "2026-03-25",
+        "total": 17044747,
+        "voting_rights": 23043419,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ACT/2026/03/FCACT078805_20260325.pdf"
+      },
+      {
+        "date": "2026-05-27",
+        "as_at": "2026-06-19",
+        "total": 17044747,
+        "voting_rights": 23056746,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ACT/2026/05/FCACT079847_20260527.pdf"
+      }
+    ]
   },
   "VOYAGEURS DU MONDE": {
     "total": 4488726,
     "date": "2026-08-31",
     "status": "Pending",
     "source": "AMF 223-16 declaration (info-financiere.gouv.fr)",
-    "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/376/2026/09/FC376645443_20260910.pdf"
+    "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/376/2026/09/FC376645443_20260910.pdf",
+    "history": [
+      {
+        "date": "2025-06-02",
+        "as_at": "2025-05-31",
+        "total": 4453166,
+        "voting_rights": 6895194,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/376/2025/06/FC376584452_20250602.pdf"
+      },
+      {
+        "date": "2025-07-04",
+        "as_at": "2025-06-30",
+        "total": 4453788,
+        "voting_rights": 7318476,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/376/2025/07/FC376588302_20250704.pdf"
+      },
+      {
+        "date": "2025-08-05",
+        "as_at": "2025-07-31",
+        "total": 4468863,
+        "voting_rights": 7333456,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/376/2025/08/FC376592048_20250805.pdf"
+      },
+      {
+        "date": "2025-09-16",
+        "as_at": "2025-08-31",
+        "total": 4468863,
+        "voting_rights": 7333450,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/376/2025/09/FC376596306_20250916.pdf"
+      },
+      {
+        "date": "2025-10-06",
+        "as_at": "2025-09-30",
+        "total": 4468870,
+        "voting_rights": 7333459,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/376/2025/10/FC376598864_20251006.pdf"
+      },
+      {
+        "date": "2025-11-03",
+        "as_at": "2025-10-31",
+        "total": 4468877,
+        "voting_rights": 7332466,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/376/2025/11/FC376602337_20251103.pdf"
+      },
+      {
+        "date": "2025-12-11",
+        "as_at": "2025-11-30",
+        "total": 4468877,
+        "voting_rights": 7332608,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/376/2025/12/FC376607222_20251211.pdf"
+      },
+      {
+        "date": "2026-01-06",
+        "as_at": "2025-12-31",
+        "total": 4468928,
+        "voting_rights": 7332715,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/376/2026/01/FC376609495_20260106.pdf"
+      },
+      {
+        "date": "2026-02-03",
+        "as_at": "2026-01-31",
+        "total": 4468934,
+        "voting_rights": 7332721,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/376/2026/02/FC376612817_20260203.pdf"
+      },
+      {
+        "date": "2026-03-12",
+        "as_at": "2026-02-28",
+        "total": 4468934,
+        "voting_rights": 7332754,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/376/2026/03/FC376618521_20260312.pdf"
+      },
+      {
+        "date": "2026-04-02",
+        "as_at": "2026-03-31",
+        "total": 4468934,
+        "voting_rights": 7332972,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/376/2026/04/FC376622731_20260402.pdf"
+      },
+      {
+        "date": "2026-05-11",
+        "as_at": "2026-04-30",
+        "total": 4468937,
+        "voting_rights": 7332760,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/376/2026/05/FC376627960_20260511.pdf"
+      },
+      {
+        "date": "2026-06-04",
+        "as_at": "2026-05-31",
+        "total": 4471930,
+        "voting_rights": 7336077,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/376/2026/06/FC376631868_20260604.pdf"
+      },
+      {
+        "date": "2026-07-01",
+        "as_at": "2026-06-30",
+        "total": 4488700,
+        "voting_rights": 7372949,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/376/2026/07/FC376635656_20260701.pdf"
+      },
+      {
+        "date": "2026-08-24",
+        "as_at": "2026-07-31",
+        "total": 4488721,
+        "voting_rights": 7360470,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/376/2026/08/FC376643327_20260824.pdf"
+      },
+      {
+        "date": "2026-09-10",
+        "as_at": "2026-08-31",
+        "total": 4488726,
+        "voting_rights": 7359942,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/376/2026/09/FC376645443_20260910.pdf"
+      }
+    ]
   },
   "ADEUNIS": {
     "total": 4595540,
@@ -627,7 +937,16 @@
     "status": "Pending",
     "source": "AMF 223-16 declaration (info-financiere.gouv.fr)",
     "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ACT/2025/03/FCACT073275_20250307.pdf",
-    "note": "Latest 223-16 declaration found (March 2025)."
+    "note": "Latest 223-16 declaration found (March 2025).",
+    "history": [
+      {
+        "date": "2025-03-07",
+        "as_at": "2025-02-28",
+        "total": 4595540,
+        "voting_rights": 4595540,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ACT/2025/03/FCACT073275_20250307.pdf"
+      }
+    ]
   },
   "NORTH ATLANTIC ENERGIES": {
     "total": 12854578,
@@ -639,23 +958,225 @@
   },
   "GAUMONT": {
     "total": 3119923,
-    "date": "2026-05-31",
+    "date": "2026-06-05",
     "status": "Pending",
     "source": "AMF 223-16 declaration (info-financiere.gouv.fr)",
-    "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2026/06/FCMKW135740_20260605.pdf"
+    "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2026/06/FCMKW135740_20260605.pdf",
+    "history": [
+      {
+        "date": "2024-12-04",
+        "as_at": "2024-12-04",
+        "total": 3119923,
+        "voting_rights": 5898029,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2024/12/FCMKW136563_20241204.pdf"
+      },
+      {
+        "date": "2025-01-07",
+        "as_at": "2025-01-07",
+        "total": 3119923,
+        "voting_rights": 5898030,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2025/01/FCMKW131742_20250107.pdf"
+      },
+      {
+        "date": "2025-06-06",
+        "as_at": "2025-06-06",
+        "total": 3119923,
+        "voting_rights": 5898031,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2025/06/FCMKW130735_20250606.pdf"
+      },
+      {
+        "date": "2025-11-07",
+        "as_at": "2025-11-07",
+        "total": 3119923,
+        "voting_rights": 5898023,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2025/11/FCMKW137701_20251107.pdf"
+      },
+      {
+        "date": "2026-04-08",
+        "as_at": "2026-04-08",
+        "total": 3119923,
+        "voting_rights": 5898094,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2026/04/FCMKW134671_20260408.pdf"
+      },
+      {
+        "date": "2026-05-15",
+        "as_at": "2026-05-15",
+        "total": 3119923,
+        "voting_rights": 5898116,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2026/05/FCMKW131140_20260515.pdf"
+      },
+      {
+        "date": "2026-06-05",
+        "as_at": "2026-06-05",
+        "total": 3119923,
+        "voting_rights": 5898132,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2026/06/FCMKW135740_20260605.pdf"
+      }
+    ]
   },
   "COMPAGNIE CHARGEURS INVEST": {
     "total": 24933990,
     "date": "2026-08-31",
     "status": "Pending",
     "source": "AMF 223-16 declaration (info-financiere.gouv.fr)",
-    "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2026/09/FCECO083059_20260902.pdf"
+    "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2026/09/FCECO083059_20260902.pdf",
+    "history": [
+      {
+        "date": "2024-12-13",
+        "as_at": "2024-11-30",
+        "total": 24862314,
+        "voting_rights": 26186541,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2024/12/FCECO076909_20241213.pdf"
+      },
+      {
+        "date": "2025-01-08",
+        "as_at": "2024-12-31",
+        "total": 24862314,
+        "voting_rights": 26200089,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2025/01/FCECO077099_20250108.pdf"
+      },
+      {
+        "date": "2025-02-13",
+        "as_at": "2025-01-31",
+        "total": 24862314,
+        "voting_rights": 26196953,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2025/02/FCECO077498_20250213.pdf"
+      },
+      {
+        "date": "2025-03-11",
+        "as_at": "2025-02-28",
+        "total": 24862314,
+        "voting_rights": 26198110,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2025/03/FCECO077768_20250311.pdf"
+      },
+      {
+        "date": "2025-04-15",
+        "as_at": "2025-03-31",
+        "total": 24862314,
+        "voting_rights": 26201195,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2025/04/FCECO078164_20250415.pdf"
+      },
+      {
+        "date": "2025-05-14",
+        "as_at": "2025-04-30",
+        "total": 24862314,
+        "voting_rights": 26237416,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2025/05/FCECO078542_20250514.pdf"
+      },
+      {
+        "date": "2025-06-16",
+        "as_at": "2025-05-31",
+        "total": 24862314,
+        "voting_rights": 26239160,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2025/06/FCECO078812_20250616.pdf"
+      },
+      {
+        "date": "2025-07-03",
+        "as_at": "2025-06-30",
+        "total": 24862314,
+        "voting_rights": 26238956,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2025/07/FCECO078973_20250703.pdf"
+      },
+      {
+        "date": "2025-08-20",
+        "as_at": "2025-07-31",
+        "total": 24886490,
+        "voting_rights": 26264026,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2025/08/FCECO079488_20250820.pdf"
+      },
+      {
+        "date": "2025-09-17",
+        "as_at": "2025-08-31",
+        "total": 24886490,
+        "voting_rights": 26265312,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2025/09/FCECO079695_20250917.pdf"
+      },
+      {
+        "date": "2025-10-07",
+        "as_at": "2025-09-30",
+        "total": 24886490,
+        "voting_rights": 26266304,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2025/10/FCECO079894_20251007.pdf"
+      },
+      {
+        "date": "2025-11-18",
+        "as_at": "2025-10-31",
+        "total": 24886490,
+        "voting_rights": 31671989,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2025/11/FCECO080283_20251118.pdf"
+      },
+      {
+        "date": "2025-12-17",
+        "as_at": "2025-11-30",
+        "total": 24886490,
+        "voting_rights": 31673046,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2025/12/FCECO080515_20251217.pdf"
+      },
+      {
+        "date": "2026-01-12",
+        "as_at": "2025-12-31",
+        "total": 24886490,
+        "voting_rights": 31671570,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2026/01/FCECO080671_20260112.pdf"
+      },
+      {
+        "date": "2026-02-18",
+        "as_at": "2026-01-31",
+        "total": 24886490,
+        "voting_rights": 31670160,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2026/02/FCECO080983_20260218.pdf"
+      },
+      {
+        "date": "2026-03-07",
+        "as_at": "2026-02-28",
+        "total": 24886490,
+        "voting_rights": 28345882,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2026/03/FCECO081183_20260306.pdf"
+      },
+      {
+        "date": "2026-06-18",
+        "as_at": "2026-05-31",
+        "total": 24933990,
+        "voting_rights": 26154352,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2026/06/FCECO082328_20260618.pdf"
+      },
+      {
+        "date": "2026-07-02",
+        "as_at": "2026-06-30",
+        "total": 24933990,
+        "voting_rights": 26154993,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2026/07/FCECO082454_20260702.pdf"
+      },
+      {
+        "date": "2026-08-24",
+        "as_at": "2026-07-31",
+        "total": 24933990,
+        "voting_rights": 26155149,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2026/08/FCECO083013_20260824.pdf"
+      },
+      {
+        "date": "2026-09-02",
+        "as_at": "2026-08-31",
+        "total": 24933990,
+        "voting_rights": 26155417,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2026/09/FCECO083059_20260902.pdf"
+      }
+    ]
   },
   "FIDUCIAL OFFICE SOLUTIONS": {
     "total": 2169232,
     "date": "2025-02-28",
     "status": "Pending",
     "source": "AMF 223-16 declaration (info-financiere.gouv.fr)",
-    "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ACT/2025/03/FCACT073222_20250305.pdf"
+    "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ACT/2025/03/FCACT073222_20250305.pdf",
+    "history": [
+      {
+        "date": "2025-03-05",
+        "as_at": "2025-02-28",
+        "total": 2169232,
+        "voting_rights": 4297579,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ACT/2025/03/FCACT073222_20250305.pdf"
+      }
+    ]
   }
 }
