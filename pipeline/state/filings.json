@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-10-01T11:40:20+00:00",
+  "generated_at": "2026-10-02T11:09:51+00:00",
   "source": {
     "bdif_endpoint": "https://bdif.amf-france.org/back/api/v1/informations?TypesInformation=OPA&TypesDocument=DeclarationAchatVente&From=0&Size=500&DateDebut=2026-09-24T00%3A00%3A00.000Z",
     "amf_takeover_reporting_page": "https://www.amf-france.org/en/professionals/professional-investors/my-relations-amf/takeover-reporting",
     "offer_period_company_list": {
-      "url": "https://www.amf-france.org/sites/institutionnel/files/private/2026-09/tableau-opa-disclosure-table-25%20septembre-2026_0.xlsx",
+      "url": "https://www.amf-france.org/sites/institutionnel/files/private/2026-10/tableau-opa-disclosure-table-2-octobre-2026_0.xlsx",
       "local_file": "amf-current-offer-companies.xlsx"
     },
     "historic_zodiac_bdif_endpoint": "https://bdif.amf-france.org/back/api/v1/informations?TypesInformation=OPA&TypesDocument=DeclarationAchatVente&From=0&Size=600&DateDebut=2016-12-31T23%3A00%3A00.000Z&DateFin=2018-12-31T22%3A59%3A59.000Z&Jetons=RS00001661",
@@ -17731,7 +17731,7 @@
     }
   ],
   "offer_period_companies_from_amf_xlsx": {
-    "last_update": "2026-09-25",
+    "last_update": "2026-10-02",
     "companies": [
       {
         "offeree": "ENTREPRENDRE",
@@ -17802,13 +17802,6 @@
         "offeror": "CINE PAR",
         "offer_announced": "2026-04-13",
         "draft_offer_filed": "2026-04-13"
-      },
-      {
-        "offeree": "ADEUNIS",
-        "isin": "FR0013284627",
-        "offeror": "WEBDYN",
-        "offer_announced": "2026-04-17",
-        "draft_offer_filed": "2026-05-21"
       },
       {
         "offeree": "INSTALLUX",
