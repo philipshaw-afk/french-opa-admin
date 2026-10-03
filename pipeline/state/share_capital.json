@@ -460,7 +460,7 @@
   },
   "FNAC DARTY SA": {
     "total": 29682146,
-    "date": "2026-08-31",
+    "date": "2026-09-30",
     "status": "Pending",
     "history": [
       {
@@ -602,6 +602,13 @@
         "total": 29682146,
         "voting_rights": 29682146,
         "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2026/09/FCMKW130614_20260902.pdf"
+      },
+      {
+        "date": "2026-10-02",
+        "as_at": "2026-09-30",
+        "total": 29682146,
+        "voting_rights": 29682146,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/MKW/2026/10/FCMKW135995_20261002.pdf"
       }
     ],
     "source": "AMF 223-16 declaration (info-financiere.gouv.fr)"
