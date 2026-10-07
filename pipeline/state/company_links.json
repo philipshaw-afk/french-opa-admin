@@ -1,6 +1,6 @@
 {
   "_note": "Company-name links for the Manage Companies page. 'approved' and 'rejected' are kept as they are; 'auto', 'suggestions' and 'fragments' are recomputed on every daily build by pipeline/company_links.py.",
-  "updated_at": "2026-10-06T12:06:21+00:00",
+  "updated_at": "2026-10-07T11:52:13+00:00",
   "approved": [
     {
       "names": [
@@ -361,7 +361,7 @@
     },
     {
       "name": "Management LP",
-      "rows": 198
+      "rows": 205
     },
     {
       "name": "Management UK",
