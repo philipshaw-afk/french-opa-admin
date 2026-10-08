@@ -1030,7 +1030,7 @@
   },
   "COMPAGNIE CHARGEURS INVEST": {
     "total": 24933990,
-    "date": "2026-08-31",
+    "date": "2026-09-30",
     "status": "Pending",
     "source": "AMF 223-16 declaration (info-financiere.gouv.fr)",
     "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2026/09/FCECO083059_20260902.pdf",
@@ -1174,6 +1174,13 @@
         "total": 24933990,
         "voting_rights": 26155417,
         "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2026/09/FCECO083059_20260902.pdf"
+      },
+      {
+        "date": "2026-10-07",
+        "as_at": "2026-09-30",
+        "total": 24933990,
+        "voting_rights": 26154582,
+        "source_url": "https://fr.ftp.opendatasoft.com/datadila/INFOFI/ECO/2026/10/FCECO083394_20261007.pdf"
       }
     ]
   },
