@@ -510,6 +510,13 @@ TEMPLATE = r"""<!doctype html>
     .ownership-fill.unassigned {
       background: #b8c0c8;
     }
+    .ownership-fill.bank { background: #2f5d8f; }
+    .ownership-fill.private-equity { background: #7a4b9c; }
+    .ownership-fill.pension { background: #a35d2c; }
+    .ownership-fill.family-office { background: #b8467a; }
+    .ownership-fill.sovereign { background: #1f8aa8; }
+    .ownership-fill.corporate { background: #4d5b6b; }
+    .ownership-fill.private-investor { background: #7d8c22; }
     .ownership-value {
       text-align: right;
       font-weight: 700;
@@ -1059,7 +1066,12 @@ TEMPLATE = r"""<!doctype html>
     const EUROPE_MANUAL_FILINGS_STORAGE_KEY = "europeManualFilings";
     const EUROPE_ALERT_SETTINGS_STORAGE_KEY = "europeAlertSettings";
     const CONSOB_MAJOR_SHAREHOLDINGS_URL = "https://www.consob.it/web/consob-and-its-activities/listed-companies/major-shareholdings-list";
-    const COMPANY_TYPES = ["Unassigned", "Hedge Fund", "Institutional Investor", "Other"];
+    // Same categories as the M&A Monitor 8.3 site, plus Other.
+    const COMPANY_TYPES = [
+      "Unassigned", "Hedge Fund", "Institutional Investor", "Bank / Stockbroker", "Private Equity Investor",
+      "Pension Fund / Nominees", "Family Office", "Sovereign Wealth Fund", "Corporate", "Private Investor", "Other",
+    ];
+    const CORE_OWNERSHIP_TYPES = ["Hedge Fund", "Institutional Investor", "Unassigned"];
     const importedShareCapitalEntries = buildImportedShareCapitalEntries();
     const shareCapitalEntries = mergeShareCapitalEntries(importedShareCapitalEntries, loadShareCapitalEntries());
     const companyLinks = loadCompanyLinks();
@@ -1936,7 +1948,7 @@ TEMPLATE = r"""<!doctype html>
           ? matching.reduce((sum, row) => sum + Number(row.currentLongPct || 0), 0)
           : (totalLong ? shares / totalLong * 100 : 0);
         return { type, shares, percent, investors: matching.length };
-      });
+      }).filter((row) => row.investors > 0 || CORE_OWNERSHIP_TYPES.includes(row.type));
     }
 
     function ownershipTypeBar(row) {
@@ -1953,10 +1965,18 @@ TEMPLATE = r"""<!doctype html>
     }
 
     function ownershipTypeClass(type) {
-      if (type === "Hedge Fund") return "hedge";
-      if (type === "Institutional Investor") return "institutional";
-      if (type === "Unassigned") return "unassigned";
-      return "other";
+      return {
+        "Hedge Fund": "hedge",
+        "Institutional Investor": "institutional",
+        "Bank / Stockbroker": "bank",
+        "Private Equity Investor": "private-equity",
+        "Pension Fund / Nominees": "pension",
+        "Family Office": "family-office",
+        "Sovereign Wealth Fund": "sovereign",
+        "Corporate": "corporate",
+        "Private Investor": "private-investor",
+        "Unassigned": "unassigned",
+      }[type] || "other";
     }
 
     function formatOwnershipPercent(value) {
