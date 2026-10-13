@@ -269,5 +269,8 @@ def refresh_state(counts, targets=None, path=STATE_FILE):
         "suggestions": result["suggestions"],
         "fragments": result["fragments"],
     }
+    if state.get("admin_published_at"):
+        # When links published from the admin site were last applied (supabase_sync.py).
+        new_state["admin_published_at"] = state["admin_published_at"]
     Path(path).write_text(json.dumps(new_state, indent=2, ensure_ascii=False), encoding="utf-8")
     return result

@@ -3,7 +3,9 @@
 
 Fetches AMF BDIF dealing disclosures (ALL filings in the window, not just a
 manual target list), downloads their PDFs, parses them, merges the results
-into pipeline/state, and rebuilds index.html at the repository root.
+into pipeline/state, and rebuilds the site data (pipeline/out/data.json) and the
+data-free index.html page. supabase_sync.py loads pipeline/state from Supabase
+before this runs and saves everything back afterwards (see the workflow).
 
 Usage:
     python pipeline/refresh.py                    # automatic window (last state date - 5 days)

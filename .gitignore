@@ -1,0 +1,6 @@
+__pycache__/
+# Built data and downloads: these go to Supabase, never into the repository.
+pipeline/out/
+pipeline/tmp_run/
+pipeline/tmp_capital/
+client-site/

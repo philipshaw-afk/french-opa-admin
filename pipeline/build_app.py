@@ -1,4 +1,5 @@
 import json
+import os
 import re
 from pathlib import Path
 
@@ -13,6 +14,12 @@ LEGACY_ZODIAC_SOURCE = STATE / "zodiac-legacy-export.txt"
 SHARE_CAPITAL_SOURCE = STATE / "share_capital.json"
 OUT_DIR = ROOT.parent
 OUT = OUT_DIR / "index.html"
+# The data no longer goes inside index.html: it is saved here and uploaded to Supabase
+# (opa-admin/data.json.gz) by supabase_sync.py; the page loads it after sign-in.
+OUT_DATA = ROOT / "out" / "data.json"
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://awpbhcyhfgsznmrqiddv.supabase.co")
+# Publishable key: safe to publish, it only identifies DIANA's Supabase project.
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "sb_publishable_wci9xM67qfl-jdIy7e9T2Q_fKALWRdF")
 ZODIAC_TARGET = "ZODIAC AEROSPACE"
 ZODIAC_ISIN = "FR0000125684"
 ZODIAC_FILER_ALIASES = {
@@ -608,12 +615,75 @@ TEMPLATE = r"""<!doctype html>
         text-align: left;
       }
     }
+    /* Supabase sign-in, banners and save status */
+    .opa-panel {
+      max-width: 560px;
+      margin: 36px auto;
+      padding: 22px 26px;
+      border: 1px solid var(--line);
+      background: #fff;
+      line-height: 1.5;
+    }
+    .opa-panel h2 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      color: var(--blue-dark);
+    }
+    .opa-panel form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 14px 0 6px;
+    }
+    .opa-panel input[type="email"] {
+      flex: 1 1 240px;
+      padding: 7px 9px;
+      border: 1px solid var(--line);
+      font: inherit;
+    }
+    .opa-error { color: var(--warn); }
+    .opa-banner {
+      margin: 8px 0;
+      padding: 10px 14px;
+      border: 1px solid #d9c27a;
+      background: #fff8e1;
+      line-height: 1.5;
+    }
+    .opa-banner.warn {
+      border-color: var(--warn);
+      background: var(--warn-bg);
+    }
+    .opa-banner button { margin: 6px 8px 0 0; }
+    .opa-save {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 50;
+      padding: 6px 12px;
+      border: 1px solid #b9dccd;
+      border-radius: 4px;
+      background: #e8f3ee;
+      color: var(--green);
+      font-size: 12px;
+    }
+    .opa-save.busy {
+      border-color: var(--line);
+      background: var(--soft);
+      color: var(--muted);
+    }
+    .opa-save.error {
+      border-color: var(--warn);
+      background: var(--warn-bg);
+      color: var(--warn);
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
   <div class="shell">
-    <div class="login">you are logged in as demo@ma-monitor.co.uk | <a>logout</a></div>
+    <div class="login" id="opaLogin">checking sign-in&hellip;</div>
     <div class="masthead">french opa monitor <em>administration</em> - ADMIN</div>
+    <div id="opaBanner"></div>
     <div class="layout">
       <nav>
         <div class="menu-block">
@@ -653,8 +723,324 @@ TEMPLATE = r"""<!doctype html>
     </div>
   </div>
 
+  <div id="opaSaveStatus" class="opa-save" hidden></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
   <script>
-    const DATA = __DATA__;
+    // -------------------------------------------------------------------------
+    // Supabase loader (DIANA's project). Signs people in with DIANA's email link,
+    // loads the settings saved on this site (table opa_admin_state) and the daily
+    // data file (storage opa-admin/data.json.gz), then starts the tracker app,
+    // whose code is the text/plain script below.
+    // -------------------------------------------------------------------------
+    const OPA_CONFIG = {
+      url: "__SUPABASE_URL__",
+      key: "__SUPABASE_KEY__",
+      bucket: "opa-admin",
+      dataFile: "data.json.gz",
+    };
+    // Settings that used to live in this browser's localStorage.
+    const OPA_SETTING_KEYS = [
+      "frenchOpaShareCapital",
+      "frenchOpaCompanyLinks",
+      "frenchOpaRejectedCompanyLinks",
+      "europeRegulatoryFilings",
+      "europeManualFilings",
+      "europeAlertSettings",
+    ];
+    const OPA_SETTING_LABELS = {
+      frenchOpaShareCapital: "total share capital entries",
+      frenchOpaCompanyLinks: "company links",
+      frenchOpaRejectedCompanyLinks: "rejected link suggestions",
+      europeRegulatoryFilings: "imported CONSOB rows",
+      europeManualFilings: "manual European filings",
+      europeAlertSettings: "alert settings",
+      companyLinksFile: "published company links",
+    };
+
+    // Same getItem/setItem interface as localStorage; every setItem is saved to Supabase.
+    const opaStore = (() => {
+      const values = new Map();
+      const seen = new Map(); // key -> updated_at of the version this page holds
+      const timers = new Map();
+      const failed = new Set();
+      let client = null;
+      let okTimer = null;
+
+      function status(text, kind) {
+        const el = document.getElementById("opaSaveStatus");
+        if (!el) return;
+        clearTimeout(okTimer);
+        el.textContent = text;
+        el.className = `opa-save ${kind || ""}`;
+        el.hidden = false;
+        if (kind === "ok") okTimer = setTimeout(() => { el.hidden = true; }, 3000);
+      }
+
+      function showConflict(key) {
+        const banner = document.getElementById("opaBanner");
+        banner.innerHTML = `<div class="opa-banner warn">
+          <b>Someone else changed the ${OPA_SETTING_LABELS[key] || key} while you had this page open.</b>
+          Your latest change to them has not been saved.<br>
+          <button type="button" id="opaReload">Reload to see their version</button>
+          <button type="button" id="opaOverwrite">Save mine over theirs</button>
+        </div>`;
+        document.getElementById("opaReload").onclick = () => location.reload();
+        document.getElementById("opaOverwrite").onclick = async () => {
+          if (await save(key, true)) banner.innerHTML = "";
+        };
+      }
+
+      async function save(key, force = false) {
+        timers.delete(key);
+        let value;
+        try { value = JSON.parse(values.get(key)); } catch { value = values.get(key); }
+        status("Saving…", "busy");
+        const { data, error } = await client.rpc("opa_save_state", {
+          p_key: key,
+          p_value: value,
+          p_expected: seen.has(key) ? seen.get(key) : null,
+          p_force: force,
+        });
+        if (error) {
+          if (error.code === "40001") {
+            showConflict(key);
+            status("Not saved – see the message at the top", "error");
+          } else {
+            failed.add(key);
+            console.error("Save failed", key, error);
+            status("Not saved – click to retry", "error");
+          }
+          return false;
+        }
+        seen.set(key, data);
+        failed.delete(key);
+        if (!timers.size && !failed.size) status("All changes saved", "ok");
+        return true;
+      }
+
+      return {
+        getItem(key) {
+          return values.has(key) ? values.get(key) : null;
+        },
+        setItem(key, value) {
+          values.set(key, String(value));
+          clearTimeout(timers.get(key));
+          timers.set(key, setTimeout(() => save(key), 400));
+          status("Saving…", "busy");
+        },
+        load(sb, rows) {
+          client = sb;
+          (rows || []).forEach((row) => {
+            values.set(row.key, JSON.stringify(row.value));
+            seen.set(row.key, row.updated_at);
+          });
+        },
+        retry() {
+          [...failed].forEach((key) => save(key));
+        },
+        unsaved() {
+          return timers.size + failed.size;
+        },
+      };
+    })();
+
+    (async function opaStart() {
+      const mainEl = document.getElementById("app");
+      const loginEl = document.getElementById("opaLogin");
+      const bannerEl = document.getElementById("opaBanner");
+      const opaEsc = (value) => String(value ?? "").replace(/[&<>"']/g, (c) =>
+        ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+      const say = (html) => { mainEl.innerHTML = `<div class="opa-panel">${html}</div>`; };
+      const local = {
+        get(key) { try { return window.localStorage.getItem(key); } catch { return null; } },
+        set(key, value) { try { window.localStorage.setItem(key, value); } catch {} },
+      };
+
+      document.getElementById("opaSaveStatus").addEventListener("click", () => opaStore.retry());
+      window.addEventListener("beforeunload", (event) => {
+        if (opaStore.unsaved()) {
+          event.preventDefault();
+          event.returnValue = "";
+        }
+      });
+
+      if (!window.supabase || !window.supabase.createClient) {
+        say("<h2>Can't load the sign-in</h2><p>The Supabase library didn't load. Check your connection and reload the page.</p>");
+        loginEl.textContent = "";
+        return;
+      }
+      const sb = window.supabase.createClient(OPA_CONFIG.url, OPA_CONFIG.key);
+
+      let linkError = "";
+      const hash = location.hash;
+      if (/error_description=/.test(hash)) {
+        linkError = decodeURIComponent((hash.match(/error_description=([^&]*)/) || [])[1] || "").replace(/\+/g, " ");
+      }
+      let session = null;
+      try {
+        ({ data: { session } } = await sb.auth.getSession());
+      } catch (error) {
+        linkError = linkError || String(error.message || error);
+      }
+      if (/access_token=|refresh_token=|error_description=|type=magiclink/.test(location.hash)) {
+        history.replaceState(null, "", location.pathname + location.search + "#/filings");
+      }
+
+      if (!session) {
+        loginEl.textContent = "not signed in";
+        say(`<h2>Sign in</h2>
+          <p>Use the email address you sign in to DIANA with. We'll email you a sign-in link &mdash; open it in this browser.</p>
+          ${linkError ? `<p class="opa-error">That sign-in link didn't work (${opaEsc(linkError)}). Ask for a new one.</p>` : ""}
+          <form id="opaSignInForm">
+            <input type="email" id="opaEmail" required placeholder="name@ma-monitor.co.uk" autocomplete="email" value="${opaEsc(local.get("opaLastEmail") || "")}">
+            <button type="submit">Email me a sign-in link</button>
+          </form>
+          <p id="opaSignInMsg"></p>`);
+        document.getElementById("opaSignInForm").addEventListener("submit", async (event) => {
+          event.preventDefault();
+          const email = document.getElementById("opaEmail").value.trim();
+          const msg = document.getElementById("opaSignInMsg");
+          local.set("opaLastEmail", email);
+          msg.className = "";
+          msg.textContent = "Sending…";
+          const { error } = await sb.auth.signInWithOtp({
+            email,
+            options: { emailRedirectTo: location.origin + location.pathname, shouldCreateUser: false },
+          });
+          if (error) {
+            msg.className = "opa-error";
+            msg.textContent = /signup|not allowed|not found/i.test(error.message)
+              ? `${email} isn't registered on DIANA.`
+              : `Couldn't send the link: ${error.message}`;
+          } else {
+            msg.textContent = `Sign-in link sent to ${email}. Open it in this browser.`;
+          }
+        });
+        return;
+      }
+
+      const email = session.user?.email || "";
+      loginEl.innerHTML = `you are logged in as ${opaEsc(email)} | <a href="#" id="opaSignOut">logout</a>`;
+      document.getElementById("opaSignOut").addEventListener("click", async (event) => {
+        event.preventDefault();
+        await sb.auth.signOut();
+        location.reload();
+      });
+
+      say("<p>Loading the tracker data&hellip;</p>");
+      const [settings, file] = await Promise.all([
+        sb.from("opa_admin_state").select("key,value,updated_at"),
+        sb.storage.from(OPA_CONFIG.bucket).download(OPA_CONFIG.dataFile),
+      ]);
+      if (file.error || !file.data) {
+        const { data: isTeam } = await sb.rpc("is_team");
+        say(isTeam
+          ? `<h2>No data yet</h2><p>The tracker data isn't in Supabase yet. It is uploaded by the daily refresh
+             (around 06:20 UK time); to upload it now, run the &ldquo;Daily data refresh&rdquo; workflow in the
+             french-opa-admin repository on GitHub.</p>`
+          : `<h2>No access</h2><p>${opaEsc(email)} isn't on the DIANA team list, so it can't open this site.</p>
+             <p><a href="#" onclick="return false" id="opaSignOut2">Sign in with a different email</a></p>`);
+        document.getElementById("opaSignOut2")?.addEventListener("click", async () => {
+          await sb.auth.signOut();
+          location.reload();
+        });
+        return;
+      }
+      if (settings.error) {
+        say(`<h2>Couldn't load the saved settings</h2><p>${opaEsc(settings.error.message)}</p><p>Reload the page to try again.</p>`);
+        return;
+      }
+
+      let data;
+      try {
+        const bytes = new Uint8Array(await file.data.arrayBuffer());
+        let text;
+        if (bytes[0] === 0x1f && bytes[1] === 0x8b) {
+          const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("gzip"));
+          text = await new Response(stream).text();
+        } else {
+          text = new TextDecoder().decode(bytes);
+        }
+        data = JSON.parse(text);
+      } catch (error) {
+        say(`<h2>Couldn't read the data file</h2><p>${opaEsc(error.message || error)}</p>`);
+        return;
+      }
+
+      opaStore.load(sb, settings.data);
+      window.__OPA_DATA__ = data;
+      const appScript = document.createElement("script");
+      appScript.textContent = document.getElementById("opa-app").textContent;
+      document.body.appendChild(appScript);
+
+      // Edits saved in this browser before the move to Supabase: offer to copy them across once.
+      if (local.get("opaImportedToSupabase")) return;
+      const identity = {
+        frenchOpaShareCapital: (e) => e && (e.id || `${e.target}-${e.date}-${e.total}`),
+        frenchOpaCompanyLinks: (e) => String(e && e.sourceName || "").trim().toUpperCase(),
+        frenchOpaRejectedCompanyLinks: (pair) => Array.isArray(pair) ? [...pair].sort().join("||") : JSON.stringify(pair),
+        europeRegulatoryFilings: (e) => (e && e.import_key) || JSON.stringify(e),
+        europeManualFilings: (e) => (e && e.import_key) || JSON.stringify(e),
+      };
+      const parse = (text, fallback) => { try { return text ? JSON.parse(text) : fallback; } catch { return fallback; } };
+      const changes = [];
+      OPA_SETTING_KEYS.forEach((key) => {
+        const mine = parse(local.get(key), null);
+        if (!mine || (Array.isArray(mine) ? !mine.length : !Object.keys(mine).length)) return;
+        const current = parse(opaStore.getItem(key), null);
+        let merged;
+        let added;
+        if (Array.isArray(mine)) {
+          const base = Array.isArray(current) ? current : [];
+          const known = new Set(base.map(identity[key]));
+          const extra = mine.filter((entry) => !known.has(identity[key](entry)));
+          merged = [...base, ...extra];
+          added = extra.length;
+        } else {
+          merged = { ...mine, ...(current && typeof current === "object" ? current : {}) };
+          added = JSON.stringify(merged) === JSON.stringify(current) ? 0 : 1;
+        }
+        if (added) changes.push({ key, merged, added });
+      });
+      if (!changes.length) {
+        local.set("opaImportedToSupabase", new Date().toISOString());
+        return;
+      }
+      const list = changes.map((c) => Array.isArray(c.merged)
+        ? `${c.added} ${OPA_SETTING_LABELS[c.key]}`
+        : OPA_SETTING_LABELS[c.key]).join(", ");
+      bannerEl.innerHTML = `<div class="opa-banner">
+        <b>This browser still holds edits saved before the site moved to Supabase:</b> ${opaEsc(list)}.
+        Copy them to Supabase so they're kept safely and everyone sees them? Anything already in Supabase is kept.<br>
+        <button type="button" id="opaImport">Copy them to Supabase</button>
+        <button type="button" id="opaImportNever">No, ignore them in this browser</button>
+        <span id="opaImportMsg"></span>
+      </div>`;
+      document.getElementById("opaImportNever").onclick = () => {
+        local.set("opaImportedToSupabase", "declined " + new Date().toISOString());
+        bannerEl.innerHTML = "";
+      };
+      document.getElementById("opaImport").onclick = async () => {
+        const msg = document.getElementById("opaImportMsg");
+        msg.textContent = "Copying…";
+        for (const change of changes) {
+          const { error } = await sb.rpc("opa_save_state", {
+            p_key: change.key, p_value: change.merged, p_expected: null, p_force: true,
+          });
+          if (error) {
+            msg.className = "opa-error";
+            msg.textContent = `Couldn't copy the ${OPA_SETTING_LABELS[change.key]}: ${error.message}`;
+            return;
+          }
+        }
+        local.set("opaImportedToSupabase", new Date().toISOString());
+        location.reload();
+      };
+    })();
+  </script>
+  <script type="text/plain" id="opa-app">
+    const DATA = window.__OPA_DATA__;
     const transactions = DATA.transactions || [];
     const notices = DATA.notice_summaries || [];
     const offers = DATA.offer_period_companies_from_amf_xlsx?.companies || [];
@@ -1275,7 +1661,7 @@ TEMPLATE = r"""<!doctype html>
         <div class="toolbar" style="grid-template-columns: minmax(240px, 430px) 90px 220px;">
           <label>Search<input id="companySearch" type="search" value="${escAttr(state.companySearch)}" placeholder="Company or shared name"></label>
           <button id="companyReset" type="button">Reset</button>
-          <button id="companyExport" type="button" title="Download company_links.json with the approved links, including any saved in this browser, to upload to pipeline/state/ in the admin repository">Export links file</button>
+          <button id="companyExport" type="button" title="Save the approved and rejected links, including any saved here with Save, so the next daily refresh builds them into the site data">Publish links to daily build</button>
         </div>
         <div class="table-meta">${filtered.length} companies shown</div>
         <div class="table-scroll">
@@ -1355,8 +1741,8 @@ TEMPLATE = r"""<!doctype html>
       return `
         <div class="summary-note">
           ${fmtNumber(autoCount)} names are linked automatically (same name apart from case, punctuation or legal form, or a shortened name)
-          and ${fmtNumber(approvedCount)} by approved links. Links saved here with <b>Save</b> apply in this browser only &mdash;
-          use <b>Export links file</b> and upload it to <code>pipeline/state/company_links.json</code> to make them permanent.
+          and ${fmtNumber(approvedCount)} by approved links. Links saved here with <b>Save</b> are stored in Supabase and apply straight away for everyone using this site and the client site &mdash;
+          use <b>Publish links to daily build</b> to have the daily refresh build them into the site data as well.
         </div>
         ${suggestions.length ? `
         <div class="table-meta">Suggested links to review (${suggestions.length}) &mdash; same brand or an incomplete name; these may be different entities</div>
@@ -1768,13 +2154,13 @@ TEMPLATE = r"""<!doctype html>
           ...row,
           status: "checked",
           result_count: (Number(row.result_count) || 0) + localItalyCounts[row.target],
-          notes: `Imported ${localItalyCounts[row.target]} CONSOB browser/session row${localItalyCounts[row.target] === 1 ? "" : "s"} in this browser.`,
+          notes: `Imported ${localItalyCounts[row.target]} CONSOB browser/session row${localItalyCounts[row.target] === 1 ? "" : "s"} on this site.`,
         } : row)
         .map((row) => manualCounts[row.target] ? {
           ...row,
           status: "checked",
           result_count: (Number(row.result_count) || 0) + manualCounts[row.target],
-          notes: `Manual filing row${manualCounts[row.target] === 1 ? "" : "s"} entered in this browser.`,
+          notes: `Manual filing row${manualCounts[row.target] === 1 ? "" : "s"} entered on this site.`,
         } : row)
         .filter((row) => haystackMatch(row) && countryMatch(row) && statusMatch(row));
       const routeChecks = europeRouteChecks.filter((row) => haystackMatch(row) && countryMatch(row) && statusMatch(row));
@@ -2374,7 +2760,7 @@ TEMPLATE = r"""<!doctype html>
 
     function loadLocalEuropeFilings() {
       try {
-        const raw = typeof localStorage === "undefined" ? "[]" : localStorage.getItem(EUROPE_FILINGS_STORAGE_KEY) || "[]";
+        const raw = typeof opaStore === "undefined" ? "[]" : opaStore.getItem(EUROPE_FILINGS_STORAGE_KEY) || "[]";
         const parsed = JSON.parse(raw);
         return Array.isArray(parsed) ? parsed : [];
       } catch {
@@ -2383,13 +2769,13 @@ TEMPLATE = r"""<!doctype html>
     }
 
     function saveLocalEuropeFilings() {
-      if (typeof localStorage === "undefined") return;
-      localStorage.setItem(EUROPE_FILINGS_STORAGE_KEY, JSON.stringify(localEuropeFilings));
+      if (typeof opaStore === "undefined") return;
+      opaStore.setItem(EUROPE_FILINGS_STORAGE_KEY, JSON.stringify(localEuropeFilings));
     }
 
     function loadManualEuropeFilings() {
       try {
-        const raw = typeof localStorage === "undefined" ? "[]" : localStorage.getItem(EUROPE_MANUAL_FILINGS_STORAGE_KEY) || "[]";
+        const raw = typeof opaStore === "undefined" ? "[]" : opaStore.getItem(EUROPE_MANUAL_FILINGS_STORAGE_KEY) || "[]";
         const parsed = JSON.parse(raw);
         return Array.isArray(parsed) ? parsed : [];
       } catch {
@@ -2398,13 +2784,13 @@ TEMPLATE = r"""<!doctype html>
     }
 
     function saveManualEuropeFilings() {
-      if (typeof localStorage === "undefined") return;
-      localStorage.setItem(EUROPE_MANUAL_FILINGS_STORAGE_KEY, JSON.stringify(manualEuropeFilings));
+      if (typeof opaStore === "undefined") return;
+      opaStore.setItem(EUROPE_MANUAL_FILINGS_STORAGE_KEY, JSON.stringify(manualEuropeFilings));
     }
 
     function loadEuropeAlertSettings() {
       try {
-        const raw = typeof localStorage === "undefined" ? "{}" : localStorage.getItem(EUROPE_ALERT_SETTINGS_STORAGE_KEY) || "{}";
+        const raw = typeof opaStore === "undefined" ? "{}" : opaStore.getItem(EUROPE_ALERT_SETTINGS_STORAGE_KEY) || "{}";
         const parsed = JSON.parse(raw);
         return parsed && typeof parsed === "object" ? parsed : {};
       } catch {
@@ -2413,8 +2799,8 @@ TEMPLATE = r"""<!doctype html>
     }
 
     function saveEuropeAlertSettings() {
-      if (typeof localStorage === "undefined") return;
-      localStorage.setItem(EUROPE_ALERT_SETTINGS_STORAGE_KEY, JSON.stringify(europeAlertSettings));
+      if (typeof opaStore === "undefined") return;
+      opaStore.setItem(EUROPE_ALERT_SETTINGS_STORAGE_KEY, JSON.stringify(europeAlertSettings));
     }
 
     function consobCaptureBookmarklet() {
@@ -2661,7 +3047,7 @@ TEMPLATE = r"""<!doctype html>
 
     function loadCompanyLinks() {
       try {
-        const raw = typeof localStorage === "undefined" ? "[]" : localStorage.getItem(COMPANY_LINKS_STORAGE_KEY) || "[]";
+        const raw = typeof opaStore === "undefined" ? "[]" : opaStore.getItem(COMPANY_LINKS_STORAGE_KEY) || "[]";
         const parsed = JSON.parse(raw);
         return Array.isArray(parsed)
           ? parsed.map((entry) => ({
@@ -2676,12 +3062,12 @@ TEMPLATE = r"""<!doctype html>
     }
 
     function saveCompanyLinks() {
-      if (typeof localStorage === "undefined") return;
-      localStorage.setItem(COMPANY_LINKS_STORAGE_KEY, JSON.stringify(companyLinks));
+      if (typeof opaStore === "undefined") return;
+      opaStore.setItem(COMPANY_LINKS_STORAGE_KEY, JSON.stringify(companyLinks));
     }
 
     // Links saved in the site data (pipeline/state/company_links.json) apply for
-    // everyone; links saved with the Save button in this browser override them.
+    // everyone; links saved with the Save button (stored in Supabase) override them.
     const serverCompanyLinks = (DATA.company_links || []).map((entry) => ({
       sourceName: String(entry.sourceName || "").trim(),
       sharedName: String(entry.sharedName || entry.sourceName || "").trim(),
@@ -2710,7 +3096,7 @@ TEMPLATE = r"""<!doctype html>
 
     function companyLinkRule(sourceName) {
       const key = normaliseCompanyKey(sourceName);
-      if (companyLinks.some((entry) => normaliseCompanyKey(entry.sourceName) === key)) return "Saved in this browser";
+      if (companyLinks.some((entry) => normaliseCompanyKey(entry.sourceName) === key)) return "Saved on this site";
       const server = serverCompanyLinks.find((entry) => normaliseCompanyKey(entry.sourceName) === key);
       if (!server) return "";
       if (server.rule === "approved (separate entities)") return "Approved (separate entities, positions added)";
@@ -2719,7 +3105,7 @@ TEMPLATE = r"""<!doctype html>
 
     function loadRejectedLinks() {
       try {
-        const parsed = JSON.parse(localStorage.getItem(REJECTED_LINKS_STORAGE_KEY) || "[]");
+        const parsed = JSON.parse(opaStore.getItem(REJECTED_LINKS_STORAGE_KEY) || "[]");
         return Array.isArray(parsed) ? parsed.filter((pair) => Array.isArray(pair) && pair.length === 2) : [];
       } catch {
         return [];
@@ -2727,7 +3113,7 @@ TEMPLATE = r"""<!doctype html>
     }
 
     function saveRejectedLinks(pairs) {
-      try { localStorage.setItem(REJECTED_LINKS_STORAGE_KEY, JSON.stringify(pairs)); } catch {}
+      try { opaStore.setItem(REJECTED_LINKS_STORAGE_KEY, JSON.stringify(pairs)); } catch {}
     }
 
     function suggestionKey(suggestion) {
@@ -2784,12 +3170,17 @@ TEMPLATE = r"""<!doctype html>
         return true;
       });
       const payload = {
-        _note: "Upload to pipeline/state/company_links.json in the french-opa-admin repository. "
-          + "'approved' and 'rejected' are kept; the daily build recomputes the rest.",
+        _note: "Published from the admin site's Manage Companies page. The daily refresh copies "
+          + "'approved' and 'rejected' into its company_links.json state and recomputes the rest.",
         approved,
         rejected,
       };
-      download("company_links.json", JSON.stringify(payload, null, 2), "application/json");
+      opaStore.setItem("companyLinksFile", JSON.stringify(payload));
+      const button = document.querySelector("#companyExport");
+      if (button) {
+        button.textContent = "Published \u2013 applied at the next daily refresh";
+        button.disabled = true;
+      }
     }
 
     function canonicalCompanyName(sourceName) {
@@ -2857,7 +3248,7 @@ TEMPLATE = r"""<!doctype html>
 
     function loadShareCapitalEntries() {
       try {
-        const raw = typeof localStorage === "undefined" ? "[]" : localStorage.getItem(SHARE_CAPITAL_STORAGE_KEY) || "[]";
+        const raw = typeof opaStore === "undefined" ? "[]" : opaStore.getItem(SHARE_CAPITAL_STORAGE_KEY) || "[]";
         const parsed = JSON.parse(raw);
         return Array.isArray(parsed)
           ? parsed.map((entry) => ({
@@ -2919,9 +3310,9 @@ TEMPLATE = r"""<!doctype html>
     }
 
     function saveShareCapitalEntries() {
-      if (typeof localStorage === "undefined") return;
+      if (typeof opaStore === "undefined") return;
       const manualEntries = shareCapitalEntries.filter((entry) => entry.source !== "spreadsheet");
-      localStorage.setItem(SHARE_CAPITAL_STORAGE_KEY, JSON.stringify(manualEntries));
+      opaStore.setItem(SHARE_CAPITAL_STORAGE_KEY, JSON.stringify(manualEntries));
     }
 
     function shareCapitalTargets() {
@@ -3673,9 +4064,16 @@ def main():
         payload["europe_regulatory"] = json.loads(EUROPE_SOURCE.read_text(encoding="utf-8"))
     payload["share_capital_entries"] = build_share_capital_entries(payload)
     add_company_links(payload)
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(TEMPLATE.replace("__DATA__", json.dumps(payload, ensure_ascii=False)), encoding="utf-8")
+    OUT_DATA.parent.mkdir(parents=True, exist_ok=True)
+    OUT_DATA.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+    OUT.write_text(page_shell(), encoding="utf-8")
+    print(OUT_DATA)
     print(OUT)
+
+
+def page_shell():
+    """index.html without any data: it signs the user in and loads the data from Supabase."""
+    return TEMPLATE.replace("__SUPABASE_URL__", SUPABASE_URL).replace("__SUPABASE_KEY__", SUPABASE_KEY)
 
 
 if __name__ == "__main__":

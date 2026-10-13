@@ -1,6 +1,19 @@
 name: Daily data refresh
 
+# Builds the data for BOTH sites and saves it in Supabase (DIANA's project):
+#   admin site  -> opa-admin/data.json.gz  (private, DIANA team sign-in)
+#   client site -> opa-public/live.json.gz (public)
+# The pipeline state is kept in Supabase too (opa-admin/state/), not in this repository.
+# Needs the repository secret OPA_BOT_PASSWORD (Supabase user opa-bot@ma-monitor.co.uk).
+
 on:
+  # Also runs when this workflow or the Supabase sync script changes (e.g. the first
+  # move to Supabase). Its own "Commit the page" push does not re-trigger it.
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/refresh.yml
+      - pipeline/supabase_sync.py
   schedule:
     - cron: "20 5 * * *"   # 05:20 UTC daily (06:20/07:20 UK, 07:20/08:20 Paris)
   workflow_dispatch:
@@ -24,8 +37,16 @@ concurrency:
 jobs:
   refresh:
     runs-on: ubuntu-latest
+    env:
+      OPA_BOT_PASSWORD: ${{ secrets.OPA_BOT_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Check out the client site (its build script makes the public data)
+        uses: actions/checkout@v4
+        with:
+          repository: philipshaw-afk/european-disclosure-client
+          path: client-site
 
       - uses: actions/setup-node@v4
         with:
@@ -38,18 +59,31 @@ jobs:
       - name: Install Python dependencies
         run: pip install pypdf openpyxl
 
+      - name: Load state from Supabase
+        run: python pipeline/supabase_sync.py pull
+
       - name: Fetch, parse and rebuild
         run: |
           python pipeline/refresh.py --since "${{ inputs.since }}" --limit "${{ inputs.limit || '500' }}"
 
-      - name: Commit and push
+      - name: Build the client site data
+        run: |
+          python client-site/pipeline/update_client_from_admin.py \
+            --admin pipeline/out/data.json \
+            --previous pipeline/out/previous-live.json \
+            --out pipeline/out/live.json
+
+      - name: Save to Supabase
+        run: python pipeline/supabase_sync.py push
+
+      - name: Commit the page if its code changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html pipeline/state
+          git add index.html
           if git diff --cached --quiet; then
-            echo "No changes to commit."
+            echo "Page unchanged."
           else
-            git commit -m "Data refresh $(date -u +%Y-%m-%d)"
+            git commit -m "Rebuild admin page $(date -u +%Y-%m-%d)"
             git push
           fi
