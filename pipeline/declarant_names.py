@@ -146,14 +146,30 @@ def _name_blocks(name_lines):
 
 def _assign_blocks(rows, blocks):
     """Split rows (top to bottom) into len(blocks) consecutive groups so that each
-    group's vertical centre is as close as possible to its block's name."""
+    group's vertical centre is as close as possible to its block's name.
+
+    Every group must hold at least one dated dealing row (each declarant in the
+    table has at least one dealing), and a small per-row term breaks near-ties in
+    favour of rows lying close to their own name."""
     n, k = len(rows), len(blocks)
     if k == 0 or n == 0:
         return [None] * n
     if k == 1:
         return [blocks[0]["name"]] * n
+    dated = [1 if DATED_RE.search(r.get("text", "")) else 0 for r in rows]
+    names = _partition(rows, blocks, dated, require_dated=True)
+    if names is None:
+        names = _partition(rows, blocks, dated, require_dated=False)
+    return names or [None] * n
+
+
+def _partition(rows, blocks, dated, require_dated):
+    n, k = len(rows), len(blocks)
     if k > n:
-        return [None] * n
+        return None
+    prefix_dated = [0]
+    for flag in dated:
+        prefix_dated.append(prefix_dated[-1] + flag)
     inf = float("inf")
     best = [[inf] * (n + 1) for _ in range(k + 1)]
     back = [[-1] * (n + 1) for _ in range(k + 1)]
@@ -164,12 +180,17 @@ def _assign_blocks(rows, blocks):
             for start in range(j - 1, end):
                 if best[j - 1][start] == inf:
                     continue
-                cost = best[j - 1][start] + abs((rows[start]["y"] + rows[end - 1]["y"]) / 2 - centre)
+                if require_dated and prefix_dated[end] - prefix_dated[start] == 0:
+                    continue
+                spread = sum(abs(rows[i]["y"] - centre) for i in range(start, end))
+                cost = (best[j - 1][start]
+                        + abs((rows[start]["y"] + rows[end - 1]["y"]) / 2 - centre)
+                        + 0.02 * spread)
                 if cost < best[j][end]:
                     best[j][end] = cost
                     back[j][end] = start
     if best[k][n] == inf:
-        return [None] * n
+        return None
     names = [None] * n
     end = n
     for j in range(k, 0, -1):
