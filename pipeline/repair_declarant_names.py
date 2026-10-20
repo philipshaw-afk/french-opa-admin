@@ -165,6 +165,7 @@ def main():
 
     renames = defaultdict(lambda: {"rows": 0, "notices": set(), "targets": set()})
     conflicts = defaultdict(lambda: {"rows": 0, "notices": set()})
+    conflict_rows = []
     no_names = []
     renamed_notices = set()
     for name, data in files.items():
@@ -184,6 +185,7 @@ def main():
                 entry["notices"].add(amf)
                 entry["targets"].add(targets.get(amf, ""))
                 renamed_notices.add(amf)
+            conflict_rows += [{"amf_number": amf, "file": name, **row} for row in stats.get("conflict_rows", [])]
             for old, new in stats["conflicts"]:
                 entry = conflicts[(old, new)]
                 entry["rows"] += 1
@@ -219,6 +221,7 @@ def main():
              for (old, new), v in conflicts.items()),
             key=lambda item: (-item["rows"], item["old"]),
         ),
+        "conflict_rows": conflict_rows,
     }
     OUT.mkdir(parents=True, exist_ok=True)
     dump(REPORT, report)

@@ -411,6 +411,11 @@ def relabel_rows(rows, operations, replace_conflicts=False):
             stats["changed"].append((old, new))
         else:
             stats["conflicts"].append((old, new))
+            stats.setdefault("conflict_rows", []).append({
+                "date": row.get("transaction_date"), "operation": row.get("operation"),
+                "quantity": row.get("quantity"), "price": row.get("price_eur"),
+                "old": old, "new": new,
+            })
             if replace_conflicts:
                 if "filer_as_parsed" not in row:
                     row["filer_as_parsed"] = old

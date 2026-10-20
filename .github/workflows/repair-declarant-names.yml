@@ -15,6 +15,11 @@ on:
         default: report
         type: choice
         options: [report, apply]
+      amf:
+        description: "Only these AMF numbers (comma-separated; blank = all notices)"
+        required: false
+        default: ""
+        type: string
       replace_conflicts:
         description: "Also replace names that conflict (tick only after checking the report)"
         required: false
@@ -58,7 +63,7 @@ jobs:
         run: |
           extra=""
           if [ "${{ inputs.replace_conflicts }}" = "true" ]; then extra="--replace-conflicts"; fi
-          python pipeline/repair_declarant_names.py --mode "${{ inputs.mode }}" $extra
+          python pipeline/repair_declarant_names.py --mode "${{ inputs.mode }}" --amf "${{ inputs.amf }}" $extra
 
       - name: Keep the report
         if: always()
