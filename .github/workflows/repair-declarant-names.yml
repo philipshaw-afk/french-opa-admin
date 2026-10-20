@@ -17,7 +17,7 @@ on:
         options: [report, apply]
 
 permissions:
-  contents: read
+  contents: write   # only to publish the report on the repair-reports branch
 
 concurrency:
   group: refresh            # never at the same time as the daily refresh
@@ -59,6 +59,23 @@ jobs:
           name: declarant-name-repair-${{ inputs.mode }}
           path: pipeline/out/declarant-name-repair.json
           if-no-files-found: ignore
+
+      - name: Publish the report on the repair-reports branch
+        if: always()
+        env:
+          MODE: ${{ inputs.mode }}
+          TOKEN: ${{ github.token }}
+        run: |
+          [ -f pipeline/out/declarant-name-repair.json ] || exit 0
+          dir="$RUNNER_TEMP/reports"
+          rm -rf "$dir" && mkdir -p "$dir"
+          cp pipeline/out/declarant-name-repair.json "$dir/declarant-name-repair-$MODE.json"
+          cd "$dir"
+          git init -q -b repair-reports
+          git add .
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -q -m "Declarant name repair report ($MODE, run $GITHUB_RUN_ID)"
+          git push -q -f "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git" repair-reports
 
       - name: Rebuild the admin data
         if: inputs.mode == 'apply'
