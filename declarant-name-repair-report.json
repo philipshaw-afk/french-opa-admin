@@ -1,0 +1,102 @@
+{
+  "mode": "report",
+  "conflicts_replaced": false,
+  "generated_at": "2026-10-20T16:25:42+00:00",
+  "notices": 5706,
+  "notices_checked": 5701,
+  "failed": [
+    {
+      "amf_number": "224C0961",
+      "error": "HTTPError: HTTP Error 404: Not Found"
+    },
+    {
+      "amf_number": "224C0962",
+      "error": "HTTPError: HTTP Error 404: Not Found"
+    },
+    {
+      "amf_number": "224C0965",
+      "error": "HTTPError: HTTP Error 404: Not Found"
+    },
+    {
+      "amf_number": "224C0967",
+      "error": "HTTPError: HTTP Error 404: Not Found"
+    },
+    {
+      "amf_number": "224C0968",
+      "error": "HTTPError: HTTP Error 404: Not Found"
+    }
+  ],
+  "no_names": [],
+  "rows_renamed": 0,
+  "notices_renamed": 0,
+  "rows_in_conflict": 4,
+  "renames": [],
+  "conflicts": [
+    {
+      "old": "Candel & Partners",
+      "new": "Digital Innovations Holding LLC",
+      "rows": 2,
+      "notices": [
+        "226C0634"
+      ]
+    },
+    {
+      "old": "Axholme SC",
+      "new": "M. Xavier Barbaro",
+      "rows": 1,
+      "notices": [
+        "224C1350"
+      ]
+    },
+    {
+      "old": "Desrousseaux",
+      "new": "Brookfield Renewable Holdings SAS",
+      "rows": 1,
+      "notices": [
+        "225C0022"
+      ]
+    }
+  ],
+  "conflict_rows": [
+    {
+      "amf_number": "226C0634",
+      "file": "filings.json",
+      "date": "2026-05-05",
+      "operation": "achat le 05/05/2026",
+      "quantity": 2000,
+      "price": "63,56",
+      "old": "Candel & Partners",
+      "new": "Digital Innovations Holding LLC"
+    },
+    {
+      "amf_number": "226C0634",
+      "file": "filings.json",
+      "date": "2026-05-06",
+      "operation": "achat le 06/05/2026",
+      "quantity": 5000,
+      "price": "59,58",
+      "old": "Candel & Partners",
+      "new": "Digital Innovations Holding LLC"
+    },
+    {
+      "amf_number": "225C0022",
+      "file": "five-year-filings.json",
+      "date": "2024-12-27",
+      "operation": "achat le 27/12/2024",
+      "quantity": 81197100,
+      "price": "39,85",
+      "old": "Desrousseaux",
+      "new": "Brookfield Renewable Holdings SAS"
+    },
+    {
+      "amf_number": "224C1350",
+      "file": "five-year-filings.json",
+      "date": "2024-07-26",
+      "operation": "Apport en nature3 le 26/07/2024",
+      "quantity": 27218,
+      "price": "39,85",
+      "old": "Axholme SC",
+      "new": "M. Xavier Barbaro"
+    }
+  ]
+}
