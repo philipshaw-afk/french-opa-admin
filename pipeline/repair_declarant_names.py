@@ -223,6 +223,9 @@ def main():
         ),
         "conflict_rows": conflict_rows,
     }
+    if args.amf:
+        # Checking particular notices: include what was read from each PDF.
+        report["operations"] = {amf: operations.get(amf) for amf in wanted}
     OUT.mkdir(parents=True, exist_ok=True)
     dump(REPORT, report)
     summary = markdown_summary(report)
