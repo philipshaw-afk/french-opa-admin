@@ -100,3 +100,23 @@ jobs:
       - name: Save to Supabase
         if: inputs.mode == 'apply'
         run: python pipeline/supabase_sync.py push
+
+      - name: Publish the filer names after the repair
+        if: inputs.mode == 'apply'
+        env:
+          TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import collections, json
+          data = json.load(open("pipeline/out/data.json", encoding="utf-8"))
+          counts = collections.Counter(row.get("filer") or "" for row in data.get("transactions", []))
+          with open("filer-names-after.json", "w", encoding="utf-8") as handle:
+              json.dump(dict(counts.most_common()), handle, ensure_ascii=False, indent=1)
+          PY
+          dir="$RUNNER_TEMP/reports"
+          cp filer-names-after.json "$dir/"
+          cd "$dir"
+          git add .
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -q -m "Filer names after the repair (run $GITHUB_RUN_ID)"
+          git push -q -f "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git" repair-reports
