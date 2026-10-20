@@ -186,6 +186,13 @@ def main():
                 entry["rows"] += 1
                 entry["notices"].add(amf)
 
+    # How many rows still carry each old name after the renames (0 = the name is gone).
+    still = Counter(
+        row.get("filer") or ""
+        for data in files.values()
+        for row in data.get("transactions", [])
+    )
+
     report = {
         "mode": args.mode,
         "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
@@ -198,6 +205,7 @@ def main():
         "rows_in_conflict": sum(v["rows"] for v in conflicts.values()),
         "renames": sorted(
             ({"old": old, "new": new, "rows": v["rows"], "notice_count": len(v["notices"]),
+              "old_rows_left": still.get(old, 0),
               "notices": sorted(v["notices"])[:20], "targets": sorted(t for t in v["targets"] if t)}
              for (old, new), v in renames.items()),
             key=lambda item: (-item["rows"], item["new"], item["old"]),
