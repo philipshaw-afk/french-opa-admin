@@ -255,12 +255,14 @@ def operations_from_pages(pages):
     return operations
 
 
-def read_pdf(path):
-    """Dated dealing rows of one AMF notice with the declarant read by position."""
+def read_pdf(path, debug=False):
+    """Dated dealing rows of one AMF notice with the declarant read by position.
+    With debug=True, also returns the text pieces found on each page."""
     from pdfminer.high_level import extract_pages
 
     pages = [page_segments(page) for page in extract_pages(str(path), laparams=None)]
-    return operations_from_pages(pages)
+    operations = operations_from_pages(pages)
+    return (operations, pages) if debug else operations
 
 
 # --------------------------------------------------------------------------- relabelling

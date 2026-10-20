@@ -65,13 +65,19 @@ def download(url, attempts=4):
     raise RuntimeError("unreachable")
 
 
-def read_notice(amf_number, url):
+DEBUG_PAGES = {}
+
+
+def read_notice(amf_number, url, debug=False):
     """Worker: download one notice and read its dealing rows with positional names."""
     try:
         data = download(url)
         with tempfile.NamedTemporaryFile(suffix=".pdf") as handle:
             handle.write(data)
             handle.flush()
+            if debug:
+                ops, pages = declarant_names.read_pdf(handle.name, debug=True)
+                return amf_number, (ops, pages), None
             return amf_number, declarant_names.read_pdf(handle.name), None
     except Exception as error:  # noqa: BLE001
         return amf_number, None, f"{type(error).__name__}: {error}"[:300]
@@ -153,12 +159,14 @@ def main():
     operations, failed = {}, []
     started = time.time()
     with ProcessPoolExecutor(max_workers=max(1, args.workers)) as pool:
-        futures = [pool.submit(read_notice, amf, urls[amf]) for amf in wanted]
+        futures = [pool.submit(read_notice, amf, urls[amf], bool(args.amf)) for amf in wanted]
         for done, future in enumerate(as_completed(futures), start=1):
             amf, ops, error = future.result()
             if error:
                 failed.append({"amf_number": amf, "error": error})
             else:
+                if args.amf:
+                    ops, DEBUG_PAGES[amf] = ops
                 operations[amf] = ops
             if done % 250 == 0 or done == len(futures):
                 print(f"  read {done:,}/{len(futures):,} notices ({time.time() - started:.0f}s)", flush=True)
@@ -226,6 +234,11 @@ def main():
     if args.amf:
         # Checking particular notices: include what was read from each PDF.
         report["operations"] = {amf: operations.get(amf) for amf in wanted}
+        report["pages"] = {
+            amf: [[{"x": round(seg["x"], 1), "y": round(seg["y"], 1), "text": seg["text"][:80]} for seg in page]
+                  for page in pages]
+            for amf, pages in DEBUG_PAGES.items()
+        }
     OUT.mkdir(parents=True, exist_ok=True)
     dump(REPORT, report)
     summary = markdown_summary(report)
