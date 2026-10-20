@@ -197,16 +197,22 @@ def operations_from_pages(pages):
         anchors = [s for s in below if DATED_RE.search(s["text"]) or CODE_RE.match(s["text"])]
         if not anchors:
             continue
-        bottom = min(s["y"] for s in anchors) - 12
-        separators = [s["y"] for s in below if SEPARATOR_RE.match(s["text"]) and s["y"] > bottom]
+        lowest = min(s["y"] for s in anchors)
+        bottom = lowest - 12        # last table row
+        name_bottom = lowest - 22   # the last name can hang a line or two lower
+        footnotes = [s["y"] for s in below if s["text"].startswith("*") and s["y"] < lowest]
+        if footnotes:
+            name_bottom = max(name_bottom, max(footnotes))
+        separators = [s["y"] for s in below if SEPARATOR_RE.match(s["text"]) and s["y"] > name_bottom]
         if separators:
             bottom = max(bottom, max(separators))
+            name_bottom = max(name_bottom, max(separators))
         top_anchor = max(s["y"] for s in anchors)
         # Name lines can sit a little above the first dealing row (a centred 2-3 line
         # name). On a continuation page (no header) keep that margin small, so the
         # page heading above the table is not read as a name.
         margin = 20 if header is not None else 12
-        table = [s for s in below if bottom < s["y"] <= top_anchor + margin]
+        table = [s for s in below if name_bottom < s["y"] <= top_anchor + margin]
         dated_x = [s["x"] for s in table if DATED_RE.search(s["text"])]
         if not dated_x:
             continue
@@ -224,7 +230,9 @@ def operations_from_pages(pages):
             )
 
         name_lines = _group_lines([s for s in table if is_name(s)])
-        rows = _group_lines([s for s in table if not is_name(s) and s["y"] <= top_anchor + 1])
+        rows = _group_lines([
+            s for s in table if not is_name(s) and bottom < s["y"] <= top_anchor + 1
+        ])
         blocks = _name_blocks(name_lines)
         if blocks:
             names = _assign_blocks(rows, blocks)
@@ -293,7 +301,18 @@ def can_replace(old, new):
     if is_junk(old):
         return True
     old_tokens, new_tokens = _fold(old), _fold(new)
-    return bool(old_tokens) and _contiguous_part(old_tokens, new_tokens)
+    return bool(old_tokens) and (
+        _contiguous_part(old_tokens, new_tokens) or _in_order(old_tokens, new_tokens)
+    )
+
+
+def _in_order(part, whole):
+    # "TFG Asset LLP" in "TFG Asset Management UK LLP" (a middle line was lost);
+    # the first word must match so a lone legal form never qualifies.
+    if len(part) < 2 or part[0] != whole[0]:
+        return False
+    rest = iter(whole)
+    return all(token in rest for token in part)
 
 
 def _op_key(text):
@@ -304,6 +323,13 @@ def _op_key(text):
     if match:
         text = text[: match.end()]
     return re.sub(r"[^a-z0-9/']+", " ", text).strip()
+
+
+def _numbers(text):
+    """Numbers on a line, with thousands spaces removed: "3 000 actions 44,58" ->
+    {"3000", "44,58"}."""
+    found = re.findall(r"\d{1,3}(?:[\s\u00a0\u202f]\d{3})+(?!\d)|\d+(?:,\d+)?", str(text or ""))
+    return {re.sub(r"[\s\u00a0\u202f]", "", value) for value in found}
 
 
 def match_names(rows, operations):
@@ -322,7 +348,18 @@ def match_names(rows, operations):
             i for i in same_date
             if row_key and (row_key in _op_key(operations[i]["text"]) or _op_key(operations[i]["text"]) in row_key)
         ]
-        candidates.append(tuple(by_text or same_date))
+        cands = by_text or same_date
+        quantity = row.get("quantity")
+        price = str(row.get("price_eur") or "").strip()
+        for wanted in (
+            str(abs(quantity)) if isinstance(quantity, int) and quantity else "",
+            price if re.match(r"^\d+(?:,\d+)?$", price) else "",
+        ):
+            if wanted:
+                narrowed = [i for i in cands if wanted in _numbers(operations[i]["text"])]
+                if narrowed:
+                    cands = narrowed
+        candidates.append(tuple(cands))
 
     groups = defaultdict(list)
     for index, cands in enumerate(candidates):
@@ -342,9 +379,11 @@ def match_names(rows, operations):
     return names
 
 
-def relabel_rows(rows, operations):
+def relabel_rows(rows, operations, replace_conflicts=False):
     """Put the positional declarant names on the parsed rows of one notice.
-    Changes rows in place; returns {"changed": [(old, new), ...], "conflicts": [...]}."""
+    Changes rows in place; returns {"changed": [(old, new), ...], "conflicts": [...]}.
+    A conflict (the row already has a different full name) is left alone unless
+    replace_conflicts is set - only after the conflicts have been checked by hand."""
     stats = {"changed": [], "conflicts": [], "unmatched": 0}
     names = []
     for op in operations:
@@ -372,6 +411,10 @@ def relabel_rows(rows, operations):
             stats["changed"].append((old, new))
         else:
             stats["conflicts"].append((old, new))
+            if replace_conflicts:
+                if "filer_as_parsed" not in row:
+                    row["filer_as_parsed"] = old
+                row["filer"] = new
     return stats
 
 

@@ -108,7 +108,8 @@ def markdown_summary(report):
         lines.append(f"| {item['old'] or '(blank)'} | {item['new']} | {item['rows']} | "
                      f"{item['notice_count']} | {', '.join(item['targets'][:3])} |")
     if report["conflicts"]:
-        lines += ["", "### Conflicts (old name kept)", "",
+        kept = "replaced" if report.get("conflicts_replaced") else "old name kept"
+        lines += ["", f"### Conflicts ({kept})", "",
                   "| Old name | Name read by position | Rows | Example notices |", "|---|---|---:|---|"]
         for item in report["conflicts"]:
             lines.append(f"| {item['old']} | {item['new']} | {item['rows']} | {', '.join(item['notices'][:3])} |")
@@ -125,6 +126,8 @@ def main():
     parser.add_argument("--limit", type=int, default=0, help="Check only the first N notices (testing)")
     parser.add_argument("--amf", default="", help="Comma-separated AMF numbers to check (testing)")
     parser.add_argument("--no-backup", action="store_true", help="Apply without the Supabase backup")
+    parser.add_argument("--replace-conflicts", action="store_true",
+                        help="Also replace names that conflict (only after checking the report's conflicts)")
     args = parser.parse_args()
 
     files = {name: load(STATE / name) for name in FILES if (STATE / name).exists()}
@@ -174,7 +177,7 @@ def main():
             if not any(op.get("filer") for op in ops):
                 no_names.append(amf)
                 continue
-            stats = declarant_names.relabel_rows(rows, ops)
+            stats = declarant_names.relabel_rows(rows, ops, replace_conflicts=args.replace_conflicts)
             for old, new in stats["changed"]:
                 entry = renames[(old, new)]
                 entry["rows"] += 1
@@ -195,6 +198,7 @@ def main():
 
     report = {
         "mode": args.mode,
+        "conflicts_replaced": bool(args.replace_conflicts),
         "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
         "notices": len(urls),
         "notices_checked": len(operations),

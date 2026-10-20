@@ -15,6 +15,11 @@ on:
         default: report
         type: choice
         options: [report, apply]
+      replace_conflicts:
+        description: "Also replace names that conflict (tick only after checking the report)"
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write   # only to publish the report on the repair-reports branch
@@ -50,7 +55,10 @@ jobs:
         run: python pipeline/supabase_sync.py pull
 
       - name: Read the declarant names from the AMF PDFs
-        run: python pipeline/repair_declarant_names.py --mode "${{ inputs.mode }}"
+        run: |
+          extra=""
+          if [ "${{ inputs.replace_conflicts }}" = "true" ]; then extra="--replace-conflicts"; fi
+          python pipeline/repair_declarant_names.py --mode "${{ inputs.mode }}" $extra
 
       - name: Keep the report
         if: always()
