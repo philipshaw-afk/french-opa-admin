@@ -1,0 +1,77 @@
+name: Repair declarant names (one-off)
+
+# Re-reads the declarant names of every stored AMF notice from its PDF (by position on
+# the page) and puts the full names on the stored rows - see
+# pipeline/repair_declarant_names.py. Only the filer names change.
+#   report: list the changes (job summary + downloadable report), save nothing
+#   apply:  back up the state in Supabase, save the renamed rows, rebuild both sites
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "report = list the changes only; apply = save them and rebuild both sites"
+        required: true
+        default: report
+        type: choice
+        options: [report, apply]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: refresh            # never at the same time as the daily refresh
+  cancel-in-progress: false
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      OPA_BOT_PASSWORD: ${{ secrets.OPA_BOT_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check out the client site (its build script makes the public data)
+        if: inputs.mode == 'apply'
+        uses: actions/checkout@v4
+        with:
+          repository: philipshaw-afk/european-disclosure-client
+          path: client-site
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies
+        run: pip install pypdf openpyxl pdfminer.six
+
+      - name: Load state from Supabase
+        run: python pipeline/supabase_sync.py pull
+
+      - name: Read the declarant names from the AMF PDFs
+        run: python pipeline/repair_declarant_names.py --mode "${{ inputs.mode }}"
+
+      - name: Keep the report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: declarant-name-repair-${{ inputs.mode }}
+          path: pipeline/out/declarant-name-repair.json
+          if-no-files-found: ignore
+
+      - name: Rebuild the admin data
+        if: inputs.mode == 'apply'
+        run: python pipeline/refresh.py --skip-fetch
+
+      - name: Build the client site data
+        if: inputs.mode == 'apply'
+        run: |
+          python client-site/pipeline/update_client_from_admin.py \
+            --admin pipeline/out/data.json \
+            --previous pipeline/out/previous-live.json \
+            --out pipeline/out/live.json
+
+      - name: Save to Supabase
+        if: inputs.mode == 'apply'
+        run: python pipeline/supabase_sync.py push

@@ -57,7 +57,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install Python dependencies
-        run: pip install pypdf openpyxl
+        run: pip install pypdf openpyxl pdfminer.six
 
       - name: Load state from Supabase
         run: python pipeline/supabase_sync.py pull

@@ -11,6 +11,8 @@ from xml.sax.saxutils import escape as xml_escape
 from openpyxl import load_workbook
 from pypdf import PdfReader
 
+import declarant_names  # full declarant names read by position (see that module)
+
 
 OPERATION_WORDS = [
     "transfert de garantie out",
@@ -948,6 +950,18 @@ def main():
         pdf_path = base_dir / local_pdf
         text = extract_pdf_text(pdf_path)
         filing_rows, summary = parse_statement(filing, text)
+        # The line-by-line reading above often cuts the declarant's name short or
+        # loses it (the name cell is centred across the dealing rows and wraps).
+        # Re-read the names by position and put the full names on the rows.
+        try:
+            name_stats = declarant_names.relabel_rows(filing_rows, declarant_names.read_pdf(pdf_path))
+            if name_stats["changed"] or name_stats["conflicts"]:
+                summary["declarant_names"] = {
+                    "changed": len(name_stats["changed"]),
+                    "conflicts": [list(pair) for pair in name_stats["conflicts"]],
+                }
+        except Exception as error:  # noqa: BLE001 - never lose a notice over this step
+            summary["declarant_names"] = {"error": str(error)[:300]}
         summary.update(
             {
                 "amf_number": filing.get("amf_number"),
